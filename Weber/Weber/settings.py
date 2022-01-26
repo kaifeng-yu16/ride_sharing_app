@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['vcm-24632.vm.duke.edu', 'vcm-24502.vm.duke.edu', '127.0.0.0']
 # Application definition
 
 INSTALLED_APPS = [
+    'user.apps.UserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
