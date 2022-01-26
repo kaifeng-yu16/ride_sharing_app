@@ -75,11 +75,14 @@ WSGI_APPLICATION = 'Weber.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'rideShareServiceDB',
+        'USER': 'kaifeng',
+        'PASSWORD': 'kaifeng',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -122,13 +125,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rideShareServiceDB',
-        'USER': 'rideuser',
-        'PASSWORD': 'rideuser',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
