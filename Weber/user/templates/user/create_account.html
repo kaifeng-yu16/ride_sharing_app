@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Account</title>
+  </head>
+  <body>
+  <h1>Create Account</h1>
+  {% if existed_user %}
+    <p> Username already exist, please try again!</p>
+  {% endif %}
+    <form action={% url 'user:create_account' %} method="post">
+    {% csrf_token %}
+        Username: <input type="text" name="username" required><br/>
+        Email: <input type="email" name="email" required><br/>
+        Password: <input type="password" name="password" required><br/>
+        <input type="submit" value="Create">
+    </form>
+    <a href={% url 'user:login'%}>Already has an account?</a>
+  </body>
+</html>
