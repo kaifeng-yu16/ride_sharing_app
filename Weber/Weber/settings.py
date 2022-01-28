@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# 注册中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+#主路由
 ROOT_URLCONF = 'Weber.urls'
 
 TEMPLATES = [
@@ -79,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rideShareServiceDB',
-        'USER': 'kaifeng',
-        'PASSWORD': 'kaifeng',
+        'USER': 'fm128',
+        'PASSWORD': 'fm128',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
