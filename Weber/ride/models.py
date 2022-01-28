@@ -19,7 +19,7 @@ class Ride(models.Model):
      special_vehicle_info = models.CharField(max_length=200, blank=True)
 
      # from sharer side
-     sharers = models.ForeignKey('Sharer', blank=True)
+     #sharers = models.ForeignKey('Sharer', blank=True)
 
      def __str__(self):
           return '%s %s %s %s %s %s %s %s %s %s %s %s'%(self.owner, self.num_owners, self.destination, self.status,
