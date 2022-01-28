@@ -13,7 +13,7 @@
     {% endif %}
     {% if user.is_authenticated %}
         <p> Already logged in!</p>
-        <a href="{% url 'user:welcome'%}"> Go to menu </a>
+        <a href="{% url 'ride:home'%}"> Go to menu </a>
     {% else %}
         <form method="post" action="{%url 'user:login' %}">
         {% csrf_token %}
