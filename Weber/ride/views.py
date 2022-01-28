@@ -19,5 +19,5 @@ def create_ride(request):
     else:'''
 
 def search_ride(request):
-    search_results = Ride.objects.all()
-    return render(request, 'ride/search_ride.html', locals())
+    #search_results = Ride.objects.all()
+    return render(request, 'ride/search_ride.html')
