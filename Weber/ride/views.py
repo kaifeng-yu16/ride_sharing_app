@@ -5,8 +5,6 @@ def create_ride(request):
     if request.method == "GET":
         return render(request, 'ride/create_ride.html')
 '''    elif request.method == "POST":
-        return render(request, )
-    else:
         username = request.POST['username']
         password = request.POST['password']
         email = request.POST['email']
@@ -16,4 +14,5 @@ def create_ride(request):
             user = User.objects.create_user(username=username, password=password, email=email)
             user.save()
             messages.add_message(request, messages.INFO, 'Create Successfully! Please log in.')
-            return HttpResponseRedirect(reverse('user:login'))'''
+            return HttpResponseRedirect(reverse('user:login'))
+    else:'''
