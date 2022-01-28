@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from . import models
 
 # Create your views here.
+from .models import Ride
+
+
 def create_ride(request):
     if request.method == "GET":
         return render(request, 'ride/create_ride.html')
