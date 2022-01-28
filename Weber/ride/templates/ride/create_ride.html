@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create A New Ride</title>
+</head>
+<body>
+    <h1>Create A New Ride</h1>
+    <form action={% url 'ride:create_ride' %} method="post">
+    Destination: <input type="text" name="dest" required><br>
+    Request Arrival Time: <input type="date" name="date" required><input type="time" name="time"><br>
+    Number of Passengers: <input type="number" name="num" required><br>
+    Vehicle Type: <input list="vehicle_type" name="vehicle">
+    <datalist id="vehicle_type">
+          <option value="Comfort">
+          <option value="Luxury">
+          <option value="Sports">
+          <option value="SUV">
+          <option value="Others">
+    </datalist><br>
+    Share Your Ride: <input type="checkbox" name="share"><br>
+    Special Request (optional): <input type="text" name="request"><br>
+    <input type="submit" value="Create Ride">
+    </form>
+</body>
+</html>
