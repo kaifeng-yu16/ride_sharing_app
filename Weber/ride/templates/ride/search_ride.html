@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Ride</title>
+</head>
+<body>
+    <h3>Search Ride</h3>
+    <form action={% url 'ride:create_ride' %} method="post">
+    Destination: <input type="text" name="dest" required><br>
+    Acceptable Arrival Time: between <input type="date" name="date" required><input type="time" name="time"> and <input type="date" name="date" required><input type="time" name="time"><br>
+    Number of Passengers in your party: <input type="number" name="num" required><br>
+    <input type="submit" value="Search Ride">
+    </form><br>
+
+    <h3>Search Results</h3>
+    <table border="1">
+        <tr>
+            <th>owner</th>
+            <th>num_owners</th>
+            <th>destination</th>
+            <th>arrival_time</th>
+            <th>vehicle_type</th>
+            <th>operation</th>
+        </tr>
+        {% for ride in search_results %}
+            <tr>
+                <td>{{ ride.owner }}</td>
+                <td>{{ ride.num_owners }}</td>
+                <td>{{ ride.destination }}</td>
+                <td>{{ ride.arrival_time }}</td>
+                <td>{{ ride.vehicle_type }}</td>
+                <td>
+                    <a href="">Join the Ride</a>
+                </td>
+            </tr>
+    </table>
+
+</body>
+</html>

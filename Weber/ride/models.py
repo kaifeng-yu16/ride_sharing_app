@@ -21,5 +21,10 @@ class Ride(models.Model):
      # from sharer side
      sharers = models.ForeignKey('Sharer', blank=True)
 
+     def __str__(self):
+          return '%s %s %s %s %s %s %s %s %s %s %s %s'%(self.owner, self.num_owners, self.destination, self.status,
+                                            self.arrival_time, self.vehicle_type, self.share, self.special_request,
+                                            self.driver, self.license, self.vehicle_volume, self.special_vehicle_info)
+
 class Sharer(models.Model):
      num_of_sharers = models.PositiveIntegerField(default=1)

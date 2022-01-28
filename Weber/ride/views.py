@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from . import models
 
 # Create your views here.
 def create_ride(request):
@@ -16,3 +17,7 @@ def create_ride(request):
             messages.add_message(request, messages.INFO, 'Create Successfully! Please log in.')
             return HttpResponseRedirect(reverse('user:login'))
     else:'''
+
+def search_ride(request):
+    search_results = Ride.objects.all()
+    return render(request, 'ride/search_ride.html', locals())
