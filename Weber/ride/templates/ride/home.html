@@ -2,10 +2,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Log In</title>
+    <title>HOME</title>
   </head>
   <body>
-  <h1>Log In</h1>
-    <a href="{% url 'user:logout'%}"> log out </a>
-  </body>
+  <h1>Home Page</h1>
+    <h3>Messages
+      {% if messages %}
+        {% for message in messages %}
+          <p> {{message}} </p>
+        {% endfor %}
+      {% endif %}
+    <h3>Current Rides<h3>
+    <h3>New Rides<h3>
+    <h3>Options</h3>
+      <a href="{% url 'user:logout'%}"> log out </a></br>
+      {% if not user.driver %}
+        <a href="{% url 'user:add_driver'%}"> Want to become a driver? </a>
+      {% endif %}
+ </body>
 </html>

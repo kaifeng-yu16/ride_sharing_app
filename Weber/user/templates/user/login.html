@@ -5,8 +5,10 @@
   </head>
   <body>
   <h1>Log In</h1>
-    {% if create_succ %}
-        <p> Create Successfully! Please log in.</p>
+    {% if messages %}
+        {% for message in messages %}
+            <p> {{message}} </p>
+        {% endfor %}
     {% endif %}
     {% if form.errors %}
         <p> Wrong username or Wrong password. Please try again.</p>
