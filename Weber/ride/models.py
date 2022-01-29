@@ -1,4 +1,5 @@
 from django.db import models
+
 from user.models import Driver
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -24,9 +25,9 @@ class Ride(models.Model):
      driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
 
      def __str__(self):
-          return '%s_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s'%(self.owner, self.num_owners, self.destination, self.status,
+          return '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(self.owner.username, self.num_owners, self.destination, self.status,
                                             self.arrival_time, self.vehicle_type, self.share, self.special_request,
-                                            self.driver, self.license, self.vehicle_volume, self.special_vehicle_info)
+                                            self.driver.user.username)
 
 class Sharer(models.Model):
      sharer = models.ForeignKey(User, on_delete=models.CASCADE)
