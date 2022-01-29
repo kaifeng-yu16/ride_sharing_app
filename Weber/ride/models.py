@@ -9,7 +9,7 @@ class Ride(models.Model):
      status = models.CharField(default='open', max_length=10)
      arrival_time = models.DateTimeField()
      vehicle_type = models.CharField(max_length=10, blank=True)
-     share = models.BooleanField(default=False)
+     allow_share = models.BooleanField(default=False)
      special_request = models.CharField(max_length=200, blank=True)
 
      # from driver side
@@ -20,9 +20,10 @@ class Ride(models.Model):
 
      # from sharer side
      #sharers = models.ForeignKey('Sharer', blank=True)
+     #sharers = models.
 
      def __str__(self):
-          return '%s %s %s %s %s %s %s %s %s %s %s %s'%(self.owner, self.num_owners, self.destination, self.status,
+          return '%s_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s'%(self.owner, self.num_owners, self.destination, self.status,
                                             self.arrival_time, self.vehicle_type, self.share, self.special_request,
                                             self.driver, self.license, self.vehicle_volume, self.special_vehicle_info)
 

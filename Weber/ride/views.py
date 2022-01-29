@@ -1,25 +1,36 @@
 from django.shortcuts import render
+from django.views.generic import ListView
+from django.db import models
 
 # Create your views here.
 from .models import Ride
 
 
 def create_ride(request):
-    if request.method == "GET":
+    if request.method == "POST":
+        destination = request.POST['destination']
+        arrival_time = request.POST['arrival_time']
+        num_passengers = request.POST['num_passengers']
+        vehicle_type = request.POST['vehicle_type']
+        allow_share = request.POST['allow_share']
+        special_request = request.POST['special_request']
+        ride = Ride.objects.create(destination=destination, arrival_time=arrival_time, num_passengers=num_passengers,
+                                   vehicle_type=vehicle_type, allow_share=allow_share, special_request=special_request)
+        return render(request, 'ride/create_ride_success.html')
+    else:
         return render(request, 'ride/create_ride.html')
-'''    elif request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        email = request.POST['email']
-        if User.objects.filter(username=username).exists():
-            return render(request, 'user/create_account.html', {'existed_user': True})
-        else:
-            user = User.objects.create_user(username=username, password=password, email=email)
-            user.save()
-            messages.add_message(request, messages.INFO, 'Create Successfully! Please log in.')
-            return HttpResponseRedirect(reverse('user:login'))
-    else:'''
+
 
 def search_ride(request):
-    search_results = Ride.objects.all()
-    return render(request, 'ride/search_ride.html', locals())
+    if request.method == "POST":
+        # search_results = Ride.objects.all()
+        destination = request.POST['destination']
+        early_time = request.POST['early_time']
+        late_time = request.POST['late_time']
+        num_passenger = request.POST['num_passenger']
+        search_results = Ride.objects.filter(destination=destination, status='open',
+                                             time__range=(early_time, late_time),
+                                             share=True)
+        return render(request, 'ride/search_ride_as_sharer.html', {'search_results': search_results})
+    else:
+        return render(request, 'ride/search_ride_as_sharer.html')

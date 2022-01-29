@@ -7,10 +7,11 @@
 <body>
     <h3>Search Ride</h3>
     <form action={% url 'ride:create_ride' %} method="post">
-    Destination: <input type="text" name="dest" required><br>
-    Acceptable Arrival Time: between <input type="date" name="date" required><input type="time" name="time"> and <input type="date" name="date" required><input type="time" name="time"><br>
-    Number of Passengers in your party: <input type="number" name="num" required><br>
-    <input type="submit" value="Search Ride">
+        {% csrf_token %}
+        Destination: <input type="text" name="destination" required><br>
+        Acceptable Arrival Time: between <input type="date" name="early_date" required><input type="time" name="early_time"> and <input type="date" name="late_date" required><input type="time" name="late_time"><br>
+        Number of Passengers in your party: <input type="number" name="num" required><br>
+        <input type="submit" value="Search Ride">
     </form><br>
 
     <h3>Search Results</h3>
@@ -31,7 +32,7 @@
                 <td>{{ ride.arrival_time }}</td>
                 <td>{{ ride.vehicle_type }}</td>
                 <td>
-                    <a href="">Join the Ride</a>
+                    <a href="ride/ride_manage.html">Join the Ride</a>
                 </td>
             </tr>
         {% endfor %}

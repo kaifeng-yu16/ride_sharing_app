@@ -7,20 +7,21 @@
 <body>
     <h1>Create A New Ride</h1>
     <form action={% url 'ride:create_ride' %} method="post">
-    Destination: <input type="text" name="dest" required><br>
-    Request Arrival Time: <input type="date" name="date" required><input type="time" name="time"><br>
-    Number of Passengers: <input type="number" name="num" required><br>
-    Vehicle Type:
-    <select name="vehicle">
-        <option value="-">Choose Vehicle Type</option>
-        <option value="Comfort">Comfort</option>
-        <option value="Luxury">Luxury</option>
-        <option value="Sports">Sports</option>
-        <option value="SUV">SUV</option>
-    </select><br>
-    Share Your Ride: <input type="checkbox" name="share"><br>
-    Special Request (optional): <input type="text" name="request"><br>
-    <input type="submit" value="Create Ride">
+        {% csrf_token %}
+        Destination: <input type="text" name="destination" required><br>
+        Request Arrival Time: <input type="date" name="date" required><input type="time" name="time"><br>
+        Number of Passengers: <input type="number" name="num" required><br>
+        Vehicle Type:
+        <select name="vehicle">
+            <option value="-">Choose Vehicle Type</option>
+            <option value="Comfort">Comfort</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Sports">Sports</option>
+            <option value="SUV">SUV</option>
+        </select><br>
+        Share Your Ride: <input type="checkbox" name="share"><br>
+        Special Request (optional): <input type="text" name="request"><br>
+        <input type="submit" value="Create Ride">
     </form>
 </body>
 </html>
