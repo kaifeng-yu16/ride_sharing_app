@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Driver info</title>
+  </head>
+  <body>
+  <h1>Driver info</h1>
+    <form action={% url 'user:add_driver' %} method="post">
+    {% csrf_token %}
+        Lisence plate number: <input type="text" name="Lisence" required><br/>
+        Vehicle type: <input type="text" name="Type" required><br/>
+        Maximum number of passengers: <input type="number"  name="Volume" min="0" required><br/>
+        Special vehical info: <input type="text" name="Info"><br/>
+        <input type="submit" value="Submit">
+    </form>
+    </br>
+    <a href={% url 'ride:home'%}>Cancel</a>
+  </body>
+</html>

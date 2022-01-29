@@ -35,3 +35,6 @@ def search_ride(request):
         return render(request, 'ride/search_ride_as_sharer.html', {'search_results': search_results})
     else:
         return render(request, 'ride/search_ride_as_sharer.html')
+
+def home(request):
+    return render(request, 'ride/home.html');

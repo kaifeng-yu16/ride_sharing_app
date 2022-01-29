@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HOME</title>
+  </head>
+  <body>
+  <h1>Home Page</h1>
+    <h3>Messages</h3>
+      {% if messages %}
+        {% for message in messages %}
+          <li>{{message}} </li>
+        {% endfor %}
+      {% endif %}
+    <h3>Current Rides</h3>
+    <h3>New Rides</h3>
+    <h3>Options</h3>
+      <a href="{% url 'user:logout'%}"> log out </a></br>
+      <a href="{% url 'user:show_info'%}"> View your info </a></br>
+      {% if not user.driver %}
+        <a href="{% url 'user:add_driver'%}"> Want to become a driver? </a>
+      {% endif %}
+ </body>
+</html>

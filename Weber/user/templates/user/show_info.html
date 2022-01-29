@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Info</title>
+  </head>
+  <body>
+    <h1>View user info</h1>
+      <h3>User info</h3>
+      Username: {{user.username}}</br>
+      Email: {{user.email}}</br></br>
+    {% if user.driver%}
+      <h3>Vehicle info</h3>
+      Vehicle type: {{user.driver.vehicle_type}}</br>
+      Lisence plate number: {{user.driver.lisence}}</br>
+      Max passenger number: {{user.driver.max_volume}}</br>
+      Special info: {{user.driver.special_info}}</br></br>
+    {% else %}
+      <a href="{% url 'user:add_driver'%}"> Want to become a driver? </a>
+    {% endif %}
+    <a href="{% url 'user:change_info'%}"> Edit info </a></br>
+    </br><a href="{% url 'ride:home'%}"> back </a>
+  </body>
+</html>

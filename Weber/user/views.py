@@ -1,8 +1,11 @@
+from .models import Driver
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm, DriverProfileForm
 
 # Create your views here.
 
@@ -27,6 +30,49 @@ def create_account(request):
             messages.add_message(request, messages.INFO, 'Create Successfully! Please log in.')
             return HttpResponseRedirect(reverse('user:login'))
 
+@login_required
+def add_driver(request):
+    if request.method == "GET":
+        return render(request, 'user/add_driver.html')
+    else:
+        lisence = request.POST['Lisence']
+        vehicle_type = request.POST['Type']
+        volume = request.POST['Volume']
+        info = request.POST['Info']
+        d = Driver(user=request.user, vehicle_type=vehicle_type, lisence=lisence, max_volume=volume, special_info=info)
+        d.save()
+        messages.add_message(request, messages.INFO, 'Create Driver Profile Successfully!')
+        return HttpResponseRedirect(reverse('ride:home'))
 
+
+@login_required
 def change_info(request):
-    return render(request, 'user/change_info.html')
+    if request.method == "GET":
+        user_form = UserProfileForm(instance=request.user)
+        driver_form = ''
+        if hasattr(request.user, 'driver'): 
+            driver_form = DriverProfileForm(instance=request.user.driver)
+        return render(request, 'user/change_info.html', {'user_form': user_form, 'driver_form': driver_form})
+    else:
+        user_form = UserProfileForm(request.POST, instance=request.user)
+        if hasattr(request.user, 'driver'):
+            driver_form = DriverProfileForm(request.POST, instance=request.user.driver)
+        if 'driver_del' in request.POST:
+            request.user.driver.delete()
+            messages.add_message(request, messages.INFO, 'Not a driver anymore!')
+            return HttpResponseRedirect(reverse('ride:home'))
+        if user_form.is_valid() and (not hasattr(request.user, 'driver')\
+                or driver_form.is_valid()):
+            user_form.save()
+            if hasattr(request.user, 'driver'):
+                driver_form.save()
+            messages.add_message(request, messages.INFO, 'Edit User Profile Successfully!')
+            return HttpResponseRedirect(reverse('ride:home'))
+        else:
+            messages.add_message(request, messages.INFO, 'Something went wrong when editing user profile. Please try again!')
+            return render(request, 'user/change_info.html', {'user_form': user_form, 'driver_form': driver_form})
+
+
+@login_required
+def show_info(request):
+    return render(request, 'user/show_info.html')

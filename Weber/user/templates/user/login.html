@@ -5,15 +5,17 @@
   </head>
   <body>
   <h1>Log In</h1>
-    {% if create_succ %}
-        <p> Create Successfully! Please log in.</p>
+    {% if messages %}
+        {% for message in messages %}
+            <p> {{message}} </p>
+        {% endfor %}
     {% endif %}
     {% if form.errors %}
         <p> Wrong username or Wrong password. Please try again.</p>
     {% endif %}
     {% if user.is_authenticated %}
         <p> Already logged in!</p>
-        <a href="{% url 'user:welcome'%}"> Go to menu </a>
+        <a href="{% url 'ride:home'%}"> Go to menu </a>
     {% else %}
         <form method="post" action="{%url 'user:login' %}">
         {% csrf_token %}
