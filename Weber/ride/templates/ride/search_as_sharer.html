@@ -9,7 +9,7 @@
     <form action={% url 'ride:create_ride' %} method="post">
         {% csrf_token %}
         Destination: <input type="text" name="destination" required><br>
-        Acceptable Arrival Time: between <input type="time" name="early_time"> and <input type="time" name="late_time"><br>
+        Acceptable Arrival Time: between <input type="datetime-local" name="early_time"> and <input type="datetime-local" name="late_time"><br>
         Number of Sharers in your party: <input type="number" name="num_sharers" required><br>
         <input type="submit" value="Search Ride">
     </form><br>
