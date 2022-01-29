@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView
 from django.db import models
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ride
@@ -34,8 +34,27 @@ def driver_edit(request):
     return HttpResponseRedirect(reverse('ride:home'))
 
 @login_required
-def sharer_join(request):
-    return HttpResponseRedirect(reverse('ride:home'))
+def sharer_join(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Exception as e:
+        messages.add_message(request, messages.INFO, 'Ride Not Found!')
+        return HttpResponseRedirect(reverse('ride:home'))
+    if request.method == "POST":
+        return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
+def owner_update(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Exception as e:
+        return HttpResponse('The ride is not existed!')
+
+    if request.method == "GET":
+
+        return render(request, 'ride/owner_update.html', locals())
+    elif request.method == "POST":
+        pass
 
 @login_required
 def driver_join(request):
