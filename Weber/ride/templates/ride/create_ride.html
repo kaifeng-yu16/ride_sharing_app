@@ -9,7 +9,7 @@
     <form action={% url 'ride:create_ride' %} method="post">
         {% csrf_token %}
         Destination: <input type="text" name="destination" required><br>
-        Request Arrival Time: <input type="datetime-local" name="datetime" required><br>
+        Request Arrival Time: <input type="datetime-local" name="arrival_time" required><br>
         Number of Passengers: <input type="number" name="num" required><br>
         Vehicle Type:
         <select name="vehicle">
