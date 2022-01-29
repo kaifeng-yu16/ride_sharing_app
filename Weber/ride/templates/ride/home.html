@@ -3,6 +3,16 @@
   <head>
     <title>HOME</title>
   </head>
+  <style type="text/css">
+    table {
+        border:solid 1px;
+        border-collapse:collapse;
+    }
+    tr,th {
+        border:solid 1px;
+        padding:8px;
+    }
+  </style>
   <body>
   <h1>Home Page</h1>
     <h3>Messages</h3>
@@ -12,6 +22,38 @@
         {% endfor %}
       {% endif %}
     <h3>Current Rides</h3>
+      <table border=solid cellspacing=10>
+      <tr>
+        <th>Destination</th>
+        <th>Arrival Time</th>
+        <th>Status</th>
+        <th>Operation</th>
+      </tr>
+      {% for o in owner %}
+        <tr>
+          <th>{{o.destination}}</th>
+          <th>{{o.arrival_time}}</th>
+          <th>{{o.status}}</th>
+          <th></th>
+        </tr>
+      {% endfor %}
+      {% for s in sharer %}
+        <tr>
+          <th>{{s.destination}}</th>
+          <th>{{s.arrival_time}}</th>
+          <th>{{s.status}}</th>
+          <th></th>
+        </tr>
+      {% endfor %}
+      {% for d in driver %}
+        <tr>
+          <th>{{d.destination}}</th>
+          <th>{{d.arrival_time}}</th>
+          <th>{{d.status}}</th>
+          <th></th>
+        </tr>
+      {% endfor %}
+      </table>
     <h3>New Rides</h3>
       <a href="{% url 'ride:create_ride' %}">
       <input type=button value='Proceed as Ride Owner'></a>
