@@ -7,22 +7,22 @@
 <body>
 <form action="/ride/owner_update/{{ ride.id }}" method="post">
     {% csrf_token %}
-    <p>Owner<input type="text" value="{{ ride.owner }}" disabled="disabled"><\p>
-    <p>Number of Owners<input type="number" value="{{ ride.num_owners }}"><\p>
-    <p>Destination<input type="text" value="{{ ride.destination }}"><\p>
-    <p>Arrival Time<input type="datetime-local" value="{{ ride.arrival_time }}"><\p>
-    <p>Vehicle Type<input type="text" value="{{ ride.vehicle_type }}"><\p>
-    <p>Special Request<input type="text" value="{{ ride.special_request }}"><\p>
+    <p>Owner<input type="text" value="{{ ride.owner }}" disabled="disabled"></p>
+    <p>Number of Owners<input type="number" value="{{ ride.num_owners }}"></p>
+    <p>Destination<input type="text" value="{{ ride.destination }}"></p>
+    <p>Arrival Time<input type="datetime-local" value="{{ ride.arrival_time }}"></p>
+    <p>Vehicle Type<input type="text" value="{{ ride.vehicle_type }}"></p>
+    <p>Special Request<input type="text" value="{{ ride.special_request }}"></p>
 
-    <p>Allow Share?<input type="text" value="{{ ride.allow_share }}"><\p>
-    <p>Number of Passengers<input type="text" value="{{ ride.num_passengers }}"><\p>
+    <p>Allow Share?<input type="text" value="{{ ride.allow_share }}"></p>
+    <p>Number of Passengers<input type="text" value="{{ ride.num_passengers }}"></p>
 
     {% if confirm %}
-    <p>Driver<input type="text" value="{{ ride.driver }}" disabled="disabled"><\p>
-    <p>License<input type="text" value="{{ ride.license }}" disabled="disabled"><\p>
-    <p>Max Volume<input type="text" value="{{ ride.max_volume }}" disabled="disabled"><\p>
+    <p>Driver<input type="text" value="{{ ride.driver }}" disabled="disabled"></p>
+    <p>License<input type="text" value="{{ ride.license }}" disabled="disabled"></p>
+    <p>Max Volume<input type="text" value="{{ ride.max_volume }}" disabled="disabled"></p>
     {% endif %}
-    <p>Status<input type="text" value="{{ ride.status }}"><\p>
+    <p>Status<input type="text" value="{{ ride.status }}"></p>
     <p><input type="submit" value="update"></p>
 </form>
 
