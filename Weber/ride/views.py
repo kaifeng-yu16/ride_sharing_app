@@ -17,9 +17,12 @@ def owner_view(request, ride_id):
         return HttpResponse('The ride is not existed!')
 
     if ride.status == 'open':
+        open = True
+    if ride.status == 'confirm':
         confirm = True
+    if ride.allow_share:
+        share = True
     if request.method == "GET":
-
         return render(request, 'ride/owner_update.html', locals())
     elif request.method == "POST":
         pass
