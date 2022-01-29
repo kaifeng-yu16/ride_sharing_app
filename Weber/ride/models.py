@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Ride(models.Model):
@@ -7,8 +8,8 @@ class Ride(models.Model):
      num_owners = models.PositiveIntegerField(default=1)
      destination = models.CharField(max_length=100)
      status = models.CharField(default='open', max_length=10)
-     arrival_date = models.DateField()
-     arrival_time = models.TimeField()
+     arrival_date = models.DateField(default=timezone.now())
+     arrival_time = models.TimeField(default=timezone.now())
      vehicle_type = models.CharField(max_length=10, blank=True)
      allow_share = models.BooleanField(default=False)
      special_request = models.CharField(max_length=200, blank=True)
