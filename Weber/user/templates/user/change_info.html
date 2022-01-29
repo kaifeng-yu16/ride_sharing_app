@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Info</title>
+    <title>Edit Info</title>
   </head>
   <body>
-  <h1>Change user info</h1>
-  <p>Change user info<p/>
+    <h1>Edit user info</h1>
+      <form action={% url 'user:change_info' %} method="post">
+        {% csrf_token %}
+        <h3>User info</h3>
+        Username: {{user.username}}</br>
+        Email: {{user_form.email}}</br></br>
+        {% if user.driver%}
+          <h3>Vehicle info</h3>
+          Vehicle type: {{driver_form.vehicle_type}}</br>
+          Lisence plate number: {{driver_form.lisence}}</br>
+          Max passenger number: {{driver_form.max_volume}}</br>
+          Special info: {{driver_form.special_info}}</br></br>
+          <input type="checkbox" name="driver_del"> Check this box if you do not want to be a driver anymore.</br>
+        {% endif %}
+        <input type="submit" value="Submit">
+      </form>
+    </br><a href="{% url 'ride:home'%}"> cancel </a>
   </body>
 </html>
