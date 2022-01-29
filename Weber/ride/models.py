@@ -1,6 +1,7 @@
 from django.db import models
 from user.models import Driver
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 RIDE_STATUS = {
@@ -14,7 +15,7 @@ class Ride(models.Model):
      num_owners = models.PositiveIntegerField(default=1)
      destination = models.CharField(max_length=100)
      status = models.CharField(default='open', choices=RIDE_STATUS, max_length=10)
-     arrival_time = models.DateTimeField()
+     arrival_time = models.DateTimeField(default=timezone.now())
      allow_share = models.BooleanField(default=False)
      vehicle_type = models.CharField(max_length=10, blank=True)
      special_request = models.CharField(max_length=200, blank=True)
