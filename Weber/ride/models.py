@@ -31,5 +31,6 @@ class Ride(models.Model):
                                             self.driver)
 
 class Sharer(models.Model):
+     ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
      sharer = models.ForeignKey(User, on_delete=models.CASCADE)
      num_of_sharers = models.PositiveIntegerField(default=1)

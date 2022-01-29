@@ -12,6 +12,15 @@
         {% endfor %}
       {% endif %}
     <h3>Current Rides</h3>
+        {% for o in owner %}
+            <li> {{o}} </li>
+        {% endfor %}
+        {% for s in sharer %}
+            <li> {{s}} </li>
+        {% endfor %}
+        {% for d in driver %}
+            <li> {{d}} </li>
+        {% endfor %}
     <h3>New Rides</h3>
       <a href="{% url 'ride:create_ride' %}">
       <input type=button value='Proceed as Ride Owner'></a>

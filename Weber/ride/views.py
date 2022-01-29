@@ -49,4 +49,11 @@ def search_ride(request):
         return render(request, 'ride/search_ride_as_sharer.html')
 
 def home(request):
-    return render(request, 'ride/home.html');
+    owner_ride=request.user.ride_set.all()
+    sharer=request.user.sharer_set.all()
+    sharer_ride=[s.ride for s in sharer]
+    if hasattr(request.user, "driver"):
+        driver_ride=request.user.driver.ride_set_all()
+    else:
+        driver_ride=[]
+    return render(request, 'ride/home.html', {'owner': owner_ride, 'sharer': sharer_ride, 'driver': driver_ride});
