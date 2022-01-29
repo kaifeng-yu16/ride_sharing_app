@@ -33,20 +33,19 @@ def create_ride(request):
     else:
         return render(request, 'ride/create_ride.html')
 
-
-def search_ride(request):
+@login_required
+def search_as_sharer(request):
     if request.method == "POST":
-        # search_results = Ride.objects.all()
         destination = request.POST['destination']
         early_time = request.POST['early_time']
         late_time = request.POST['late_time']
-        num_passenger = request.POST['num_passenger']
         search_results = Ride.objects.filter(destination=destination, status='open',
-                                             time__range=(early_time, late_time),
-                                             share=True)
-        return render(request, 'ride/search_ride_as_sharer.html', {'search_results': search_results})
+                                             arrival_time__range=(early_time, late_time),
+                                             allow_share=True)
+        return render(request, 'ride/search_as_sharer.html', {'search_results': search_results})
     else:
-        return render(request, 'ride/search_ride_as_sharer.html')
+        return render(request, 'ride/search_as_sharer.html')
 
+@login_required
 def home(request):
     return render(request, 'ride/home.html');
