@@ -15,7 +15,7 @@ class Ride(models.Model):
      num_owners = models.PositiveIntegerField(default=1)
      destination = models.CharField(max_length=100)
      status = models.CharField(default='open', choices=RIDE_STATUS, max_length=10)
-     arrival_time = models.DateTimeField(default=timezone.now())
+     arrival_time = models.DateTimeField()
      allow_share = models.BooleanField(default=False)
      vehicle_type = models.CharField(max_length=10, blank=True)
      special_request = models.CharField(max_length=200, blank=True)
