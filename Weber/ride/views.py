@@ -10,6 +10,13 @@ from django.db.models import Q
 # Create your views here.
 from .models import Ride
 
+@login_required
+def owner_edit(request):
+    return render(request, 'ride/home.html')
+
+@login_required
+def driver_edit(request):
+    return render(request, 'ride/home.html')
 
 @login_required
 def create_ride(request):
@@ -54,7 +61,7 @@ def search_as_driver(request):
             messages.add_message(request, messages.INFO, 'You are not a driver!')
             return HttpResponseRedirect(reverse('ride:home'))
         search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume,
-                                             special_request=request.user.driver.special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user)
+                                             special_request=request.user.driver.special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user).exclude(~Q(sharer=request.user))
         return render(request, 'ride/search_as_driver.html', {'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
