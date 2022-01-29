@@ -5,10 +5,9 @@ from django.db import models
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-
-# Create your views here.
 from .models import Ride
+from django.db.models import Q
+# Create your views here.
 
 @login_required
 def owner_view(request):
@@ -74,7 +73,7 @@ def search_as_sharer(request):
         search_results = Ride.objects.filter(destination=destination, status='open',
                                              arrival_time__range=(early_time, late_time),
                                              allow_share=True).exclude(owner=request.user)
-        return render(request, 'ride/search_as_sharer.html', {'search_results': search_results})
+        return render(request, 'ride/search_as_sharer.html', {'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_sharer.html')
 
@@ -84,11 +83,12 @@ def search_as_driver(request):
         if not hasattr(request.user, 'driver'):
             messages.add_message(request, messages.INFO, 'You are not a driver!')
             return HttpResponseRedirect(reverse('ride:home'))
-        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume,
-                                             special_request=request.user.driver.special_info)\
+        sharer_ride_id = list(s.ride.id for s in request.user.sharer_set.all())
+        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume)\
+            .filter(Q(special_request=request.user.driver.special_info)|Q(special_request=''))\
             .filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user)\
-            .exclude(sharer_sets__contains=request.user)
-        return render(request, 'ride/search_as_driver.html', {'search_results': search_results})
+            .exclude(id__in=sharer_ride_id)
+        return render(request, 'ride/search_as_driver.html', {'has_result':True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
 

@@ -14,6 +14,7 @@
         <input type="submit" value="Search Ride">
     </form><br>
 
+    {% if has_result %}
     <h3>Search Results</h3>
     <table border="1">
         <tr>
@@ -32,11 +33,16 @@
                 <td>{{ ride.arrival_time }}</td>
                 <td>{{ ride.vehicle_type }}</td>
                 <td>
-                    <a href="ride/home.html">Join the Ride</a>
+                    <form action={% url 'ride:sharer_join' %} method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="join">
+                    </form><br>
                 </td>
             </tr>
         {% endfor %}
     </table>
+    {% endif %}
+    <a href="{% url 'ride:home' %}">back</a>
 
 </body>
 </html>

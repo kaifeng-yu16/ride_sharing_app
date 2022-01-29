@@ -26,6 +26,7 @@
       <tr>
         <th>Destination</th>
         <th>Arrival Time</th>
+        <th>Role</th>
         <th>Status</th>
         <th>Operation</th>
       </tr>
@@ -33,30 +34,39 @@
         <tr>
           <th>{{o.destination}}</th>
           <th>{{o.arrival_time}}</th>
+          <th>OWNER</th>
           <th>{{o.status}}</th>
-          <th></th>
+          <th><a href="{% url 'ride:owner_view' %}">view detail</a></th>
         </tr>
       {% endfor %}
       {% for s in sharer %}
         <tr>
           <th>{{s.destination}}</th>
           <th>{{s.arrival_time}}</th>
+          <th>SHARER</th>
           <th>{{s.status}}</th>
-          <th></th>
+          <th><a href="{% url 'ride:sharer_view' %}">view detail</a></th>
         </tr>
       {% endfor %}
       {% for d in driver %}
         <tr>
           <th>{{d.destination}}</th>
           <th>{{d.arrival_time}}</th>
+          <th>DRIVER</th>
           <th>{{d.status}}</th>
-          <th></th>
+          <th><a href="{% url 'ride:driver_view' %}">view detail</a></th>
         </tr>
       {% endfor %}
       </table>
     <h3>New Rides</h3>
       <a href="{% url 'ride:create_ride' %}">
-      <input type=button value='Proceed as Ride Owner'></a>
+      <input type=button value='Proceed as Ride Owner'></a></br>
+      <a href="{% url 'ride:search_as_sharer' %}">
+      <input type=button value='Proceed as Ride Sharer'></a></br>
+      {% if user.driver %}
+        <a href="{% url 'ride:search_as_driver' %}">
+        <input type=button value='Proceed as Ride Driver'></a></br>
+      {% endif %}
     <h3>Options</h3>
       <a href="{% url 'user:logout'%}"> log out </a></br>
       <a href="{% url 'user:show_info'%}"> View your info </a></br>
