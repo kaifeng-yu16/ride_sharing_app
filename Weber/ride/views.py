@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ride
 from django.db.models import Q
-from django import forms
+from .forms import OwnerRideForm, SharerRideForm
 
 
 # Create your views here.
@@ -61,8 +61,14 @@ def owner_view(request, ride_id):
 '''
 
 @login_required
-def owner_edit(request):
-    return HttpResponseRedirect(reverse('ride:home'))
+def owner_update(request):
+    owner_form = OwnerRideForm()
+    if request.method == "POST":
+        owner_form = OwnerRideForm(request.POST)
+        if owner_form.is_valid():
+            messages.add_message(request, messages.INFO, 'Updated the Ride Successfully!')
+            return HttpResponseRedirect(reverse('ride:home'))
+    return render(request, '', {'owner_form': owner_form})
 
 
 @login_required
