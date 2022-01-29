@@ -5,6 +5,7 @@
     <title>Update Ride As A Owner</title>
 </head>
 <body>
+    <h3>View and Edit Your Ride Information</h3>
     <form action="/ride/owner_update/{{ ride.id }}" method="post">
         {% csrf_token %}
         <fieldset>
@@ -16,7 +17,7 @@
             <p>Vehicle Type<input type="text" value="{{ ride.vehicle_type }}"> (choose in '-', 'Comfort', 'Luxury', 'Sports' and 'SUV')</p>
             <p>Special Request<input type="text" value="{{ ride.special_request }}"></p>
             <p>Allow Share?<input type="checkbox" value="{{ ride.allow_share }}">
-                Number of Passengers<input type="number" value="{{ ride.num_passengers }}"></p>
+                Number of Passengers<input type="number" value="{{ ride.num_passengers }}" disabled="disabled"></p>
         </fieldset>
         <p>Status<input type="text" value="{{ ride.status }}"></p>
         {% if confirm %}
