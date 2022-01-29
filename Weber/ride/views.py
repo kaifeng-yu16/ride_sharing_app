@@ -5,6 +5,7 @@ from django.db import models
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 from .models import Ride
@@ -45,6 +46,18 @@ def search_as_sharer(request):
         return render(request, 'ride/search_as_sharer.html', {'search_results': search_results})
     else:
         return render(request, 'ride/search_as_sharer.html')
+
+@login_required
+def search_as_driver(request):
+    if request.method == "POST":
+        vehicle_type = request.POST['vehicle_type']
+        max_volume = request.POST['max_volume']
+        special_info = request.POST['special_info']
+        search_results = Ride.objects.filter(status='open', num_passengers__lte=max_volume,
+                                             special_request=special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=vehicle_type))
+        return render(request, 'ride/search_as_driver.html', {'search_results': search_results})
+    else:
+        return render(request, 'ride/search_as_driver.html')
 
 @login_required
 def home(request):

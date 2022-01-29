@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search Ride</title>
+    <title>Search Ride As A Sharer</title>
 </head>
 <body>
-    <h3>Search Ride</h3>
+    <h3>Search Ride As A Sharer</h3>
     <form action={% url 'ride:search_as_sharer' %} method="post">
         {% csrf_token %}
         Destination: <input type="text" name="destination" required><br>
@@ -17,12 +17,12 @@
     <h3>Search Results</h3>
     <table border="1">
         <tr>
-            <th>owner</th>
-            <th>num_owners</th>
-            <th>destination</th>
-            <th>arrival_time</th>
-            <th>vehicle_type</th>
-            <th>operation</th>
+            <th>Owner</th>
+            <th>Number of Owners</th>
+            <th>Destination</th>
+            <th>Arrival Time</th>
+            <th>Vehicle Type</th>
+            <th>Operations</th>
         </tr>
         {% for ride in search_results %}
             <tr>
@@ -32,7 +32,7 @@
                 <td>{{ ride.arrival_time }}</td>
                 <td>{{ ride.vehicle_type }}</td>
                 <td>
-                    <a href="ride/ride_manage.html">Join the Ride</a>
+                    <a href="ride/home.html">Join the Ride</a>
                 </td>
             </tr>
         {% endfor %}
