@@ -11,12 +11,36 @@ from django.db.models import Q
 from .models import Ride
 
 @login_required
+def owner_view(request):
+    return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
 def owner_edit(request):
-    return render(request, 'ride/home.html')
+    return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
+def sharer_view(request):
+    return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
+def sharer_edit(request):
+    return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
+def driver_view(request):
+    return HttpResponseRedirect(reverse('ride:home'))
 
 @login_required
 def driver_edit(request):
-    return render(request, 'ride/home.html')
+    return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
+def sharer_join(request):
+    return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
+def driver_join(request):
+    return HttpResponseRedirect(reverse('ride:home'))
 
 @login_required
 def create_ride(request):
@@ -61,7 +85,9 @@ def search_as_driver(request):
             messages.add_message(request, messages.INFO, 'You are not a driver!')
             return HttpResponseRedirect(reverse('ride:home'))
         search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume,
-                                             special_request=request.user.driver.special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user).exclude(~Q(sharer=request.user))
+                                             special_request=request.user.driver.special_info)\
+            .filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user)\
+            .exclude(sharer_sets__contains=request.user)
         return render(request, 'ride/search_as_driver.html', {'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
