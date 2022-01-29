@@ -1,10 +1,18 @@
 from django.db import models
 
-from user.models import *
+from user.models import Driver
 from django.contrib.auth.models import User
 from django.utils import timezone
 
 # Create your models here.
+VEHICLE_TYPE = {
+    ("-", "-"),
+    ("Comfort", "Comfort"),
+    ("Luxury", "Luxury"),
+    ("Sports", "Sports"),
+    ("SUV", "SUV"),
+}
+
 RIDE_STATUS = {
     ("open", "open"),
     ("confirm", "confirm"),

@@ -35,7 +35,7 @@ def add_driver(request):
     if request.method == "GET":
         return render(request, 'user/add_driver.html')
     else:
-        license = request.POST['Lisence']
+        license = request.POST['License']
         vehicle_type = request.POST['Type']
         volume = request.POST['Volume']
         info = request.POST['Info']
