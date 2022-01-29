@@ -13,6 +13,8 @@
       {% endif %}
     <h3>Current Rides</h3>
     <h3>New Rides</h3>
+      <a href="{url 'ride:create_ride'}">
+      <input type=button value='Proceed as Ride Owner'>
     <h3>Options</h3>
       <a href="{% url 'user:logout'%}"> log out </a></br>
       <a href="{% url 'user:show_info'%}"> View your info </a></br>

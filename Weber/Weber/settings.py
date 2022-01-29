@@ -81,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rideShareServiceDB',
-        'USER': 'fm128',
-        'PASSWORD': 'fm128',
+        'USER': 'kaifeng',
+        'PASSWORD': 'kaifeng',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
