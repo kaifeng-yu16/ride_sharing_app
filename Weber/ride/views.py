@@ -1,22 +1,35 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic import ListView
 from django.db import models
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from .models import Ride
 
 
+@login_required
 def create_ride(request):
     if request.method == "POST":
+        owner = request.user
+        num_owners = request.POST['num'] 
+        num_passengers = num_owners
         destination = request.POST['destination']
+        status = 'open'
         arrival_time = request.POST['arrival_time']
-        num_passengers = request.POST['num_passengers']
-        vehicle_type = request.POST['vehicle_type']
-        allow_share = request.POST['allow_share']
-        special_request = request.POST['special_request']
-        ride = Ride.objects.create(destination=destination, arrival_time=arrival_time, num_passengers=num_passengers,
+        if 'share' in request.POST:
+            allow_share = True
+        else:
+            allow_share = False
+        vehicle_type = request.POST['vehicle']
+        special_request = request.POST['request']
+        ride = Ride.objects.create(owner=owner, num_owners=num_owners, num_passengers=num_passengers,\
+                                   destination=destination, status=status, arrival_time=arrival_time,\
                                    vehicle_type=vehicle_type, allow_share=allow_share, special_request=special_request)
-        return render(request, 'ride/create_ride_success.html')
+        messages.add_message(request, messages.INFO, 'Ride Create Successfully!')
+        return HttpResponseRedirect(reverse('ride:home'))
     else:
         return render(request, 'ride/create_ride.html')
 

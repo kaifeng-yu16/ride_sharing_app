@@ -10,4 +10,4 @@ class UserProfileForm(ModelForm):
 class DriverProfileForm(ModelForm):
     class Meta:
         model = Driver
-        fields = ['vehicle_type', 'lisence', 'max_volume', 'special_info']
+        fields = ['vehicle_type', 'license', 'max_volume', 'special_info']
