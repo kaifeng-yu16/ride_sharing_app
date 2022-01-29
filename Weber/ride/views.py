@@ -9,12 +9,13 @@ from .models import Ride
 def create_ride(request):
     if request.method == "POST":
         destination = request.POST['destination']
+        arrival_date = request.POST['arrival_date']
         arrival_time = request.POST['arrival_time']
         num_passengers = request.POST['num_passengers']
         vehicle_type = request.POST['vehicle_type']
         allow_share = request.POST['allow_share']
         special_request = request.POST['special_request']
-        ride = Ride.objects.create(destination=destination, arrival_time=arrival_time, num_passengers=num_passengers,
+        ride = Ride.objects.create(destination=destination, arrival_date=arrival_date, arrival_time=arrival_time, num_passengers=num_passengers,
                                    vehicle_type=vehicle_type, allow_share=allow_share, special_request=special_request)
         return render(request, 'ride/create_ride_success.html')
     else:
