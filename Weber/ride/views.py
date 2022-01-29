@@ -10,8 +10,17 @@ from django.db.models import Q
 # Create your views here.
 
 @login_required
-def owner_view(request):
-    return HttpResponseRedirect(reverse('ride:home'))
+def owner_view(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Exception as e:
+        return HttpResponse('The ride is not existed!')
+
+    if request.method == "GET":
+
+        return render(request, 'ride/owner_update.html', locals())
+    elif request.method == "POST":
+        pass
 
 @login_required
 def owner_edit(request):

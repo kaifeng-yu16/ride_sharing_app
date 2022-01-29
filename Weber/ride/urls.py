@@ -12,7 +12,7 @@ urlpatterns = [
     path('owner_edit/', views.owner_edit, name='owner_edit'),
     path('sharer_join/', views.sharer_join, name='sharer_join'),
     path('driver_view/', views.driver_view, name='driver_view'),
-    path('owner_view/<int:id>', views.owner_view, name='owner_view'),
+    path('owner_view/<int:ride_id>', views.owner_view, name='owner_view'),
     path('sharer_view/', views.sharer_view, name='sharer_view'),
     path('home/', views.home, name='home'),
 ]
