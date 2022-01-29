@@ -17,7 +17,7 @@ class Ride(models.Model):
      driver = models.CharField(max_length=100)
 
      # from sharer side
-     sharers = models.ForeignKey('Sharer', blank=True)
+     #sharers = models.ForeignKey('Sharer', on_delete=models.CASCADE)
      #sharers = models.
 
      def __str__(self):
