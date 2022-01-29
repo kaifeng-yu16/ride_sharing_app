@@ -50,11 +50,11 @@ def search_as_sharer(request):
 @login_required
 def search_as_driver(request):
     if request.method == "POST":
-        vehicle_type = request.POST['vehicle_type']
-        max_volume = request.POST['max_volume']
-        special_info = request.POST['special_info']
-        search_results = Ride.objects.filter(status='open', num_passengers__lte=max_volume,
-                                             special_request=special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=vehicle_type))
+        if not hasattr(request.user, 'driver'):
+            messages.add_message(request, messages.INFO, 'You are not a driver!')
+            return HttpResponseRedirect(reverse('ride:home'))
+        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume,
+                                             special_request=request.user.driver.special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type))
         return render(request, 'ride/search_as_driver.html', {'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
