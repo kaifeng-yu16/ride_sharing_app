@@ -42,7 +42,7 @@ def search_as_sharer(request):
         late_time = request.POST['late_time']
         search_results = Ride.objects.filter(destination=destination, status='open',
                                              arrival_time__range=(early_time, late_time),
-                                             allow_share=True)
+                                             allow_share=True).exclude(owner=request.user)
         return render(request, 'ride/search_as_sharer.html', {'search_results': search_results})
     else:
         return render(request, 'ride/search_as_sharer.html')
@@ -54,7 +54,7 @@ def search_as_driver(request):
             messages.add_message(request, messages.INFO, 'You are not a driver!')
             return HttpResponseRedirect(reverse('ride:home'))
         search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume,
-                                             special_request=request.user.driver.special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type))
+                                             special_request=request.user.driver.special_info).filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user)
         return render(request, 'ride/search_as_driver.html', {'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
