@@ -16,7 +16,8 @@ def owner_view(request, ride_id):
     except Exception as e:
         return HttpResponse('The ride is not existed!')
 
-    confirm = ride.status
+    if ride.status == 'open':
+        confirm = True
     if request.method == "GET":
 
         return render(request, 'ride/owner_update.html', locals())
