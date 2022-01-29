@@ -6,11 +6,11 @@
 </head>
 <body>
     <h3>Search Ride</h3>
-    <form action={% url 'ride:create_ride' %} method="post">
+    <form action={% url 'ride:search_as_sharer' %} method="post">
         {% csrf_token %}
         Destination: <input type="text" name="destination" required><br>
-        Acceptable Arrival Time: between <input type="date" name="early_date" required><input type="time" name="early_time"> and <input type="date" name="late_date" required><input type="time" name="late_time"><br>
-        Number of Passengers in your party: <input type="number" name="num" required><br>
+        Acceptable Arrival Time: between <input type="datetime-local" name="early_time" required> and <input type="datetime-local" name="late_time" required><br>
+        Number of Sharers in your party: <input type="number" name="num_sharers" required><br>
         <input type="submit" value="Search Ride">
     </form><br>
 
