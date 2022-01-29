@@ -13,8 +13,15 @@ from django import forms
 # Create your views here.
 
 @login_required
-def owner_view(request):
-    return render(request, 'ride/owner_view.html')
+def owner_view(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Exception as e:
+        return HttpResponse('The ride is not existed!')
+
+    if request.method == "GET":
+        return render(request, 'ride/owner_view.html', locals())
+
 '''
 @login_required
 def owner_view(request, ride_id):
