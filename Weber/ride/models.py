@@ -2,6 +2,7 @@ from django.db import models
 
 from user.models import Driver
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 RIDE_STATUS = {
