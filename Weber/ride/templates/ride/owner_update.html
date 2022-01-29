@@ -21,7 +21,7 @@
     <p>Driver<input type="text" value="{{ ride.driver }}" disabled="disabled"><\p>
     <p>License<input type="text" value="{{ ride.license }}" disabled="disabled"><\p>
     <p>Max Volume<input type="text" value="{{ ride.max_volume }}" disabled="disabled"><\p>
-    {% if confirm %}
+    {% endif %}
     <p>Status<input type="text" value="{{ ride.status }}"><\p>
     <p><input type="submit" value="update"></p>
 </form>
