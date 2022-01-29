@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm, DriverProfileForm
 
 # Create your views here.
-
 def welcome(request):
     return render(request, 'user/welcome.html')
 

@@ -7,8 +7,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ride
 from django.db.models import Q
+from django import forms
+
+
 # Create your views here.
 
+@login_required
+def owner_view(request):
+    return render(request, 'ride/owner_view.html')
+'''
 @login_required
 def owner_view(request, ride_id):
     try:
@@ -22,30 +29,57 @@ def owner_view(request, ride_id):
         confirm = True
     if ride.allow_share:
         share = True
+
     if request.method == "GET":
         return render(request, 'ride/owner_update.html', locals())
     elif request.method == "POST":
-        pass
+        num_owners = request.POST['num']
+        #num_passengers = num_owners
+        destination = request.POST['destination']
+        status = request.POST['status']
+        arrival_time = request.POST['arrival_time']
+        if 'share' in request.POST:
+            allow_share = True
+        else:
+            allow_share = False
+        vehicle_type = request.POST['vehicle']
+        special_request = request.POST['request']
+
+        num_owners=num_owners
+        #num_passengers=num_passengers
+        destination=destination
+        status=status
+        arrival_time=arrival_time
+        vehicle_type=vehicle_type
+        allow_share=allow_share
+        special_request=special_request)
+        messages.add_message(request, messages.INFO, 'Ride Create Successfully!')
+'''
 
 @login_required
 def owner_edit(request):
     return HttpResponseRedirect(reverse('ride:home'))
 
+
 @login_required
 def sharer_view(request):
     return HttpResponseRedirect(reverse('ride:home'))
+
 
 @login_required
 def sharer_edit(request):
     return HttpResponseRedirect(reverse('ride:home'))
 
+
 @login_required
 def driver_view(request):
     return HttpResponseRedirect(reverse('ride:home'))
 
+
 @login_required
 def driver_edit(request):
     return HttpResponseRedirect(reverse('ride:home'))
+
 
 @login_required
 def sharer_join(request, ride_id):
@@ -56,6 +90,7 @@ def sharer_join(request, ride_id):
         return HttpResponseRedirect(reverse('ride:home'))
     if request.method == "POST":
         return HttpResponseRedirect(reverse('ride:home'))
+
 
 @login_required
 def owner_update(request, ride_id):
@@ -70,15 +105,17 @@ def owner_update(request, ride_id):
     elif request.method == "POST":
         pass
 
+
 @login_required
 def driver_join(request):
     return HttpResponseRedirect(reverse('ride:home'))
+
 
 @login_required
 def create_ride(request):
     if request.method == "POST":
         owner = request.user
-        num_owners = request.POST['num'] 
+        num_owners = request.POST['num']
         num_passengers = num_owners
         destination = request.POST['destination']
         status = 'open'
@@ -89,13 +126,14 @@ def create_ride(request):
             allow_share = False
         vehicle_type = request.POST['vehicle']
         special_request = request.POST['request']
-        ride = Ride.objects.create(owner=owner, num_owners=num_owners, num_passengers=num_passengers,\
-                                   destination=destination, status=status, arrival_time=arrival_time,\
+        ride = Ride.objects.create(owner=owner, num_owners=num_owners, num_passengers=num_passengers, \
+                                   destination=destination, status=status, arrival_time=arrival_time, \
                                    vehicle_type=vehicle_type, allow_share=allow_share, special_request=special_request)
         messages.add_message(request, messages.INFO, 'Ride Create Successfully!')
         return HttpResponseRedirect(reverse('ride:home'))
     else:
         return render(request, 'ride/create_ride.html')
+
 
 @login_required
 def search_as_sharer(request):
@@ -110,6 +148,7 @@ def search_as_sharer(request):
     else:
         return render(request, 'ride/search_as_sharer.html')
 
+
 @login_required
 def search_as_driver(request):
     if request.method == "POST":
@@ -117,21 +156,22 @@ def search_as_driver(request):
             messages.add_message(request, messages.INFO, 'You are not a driver!')
             return HttpResponseRedirect(reverse('ride:home'))
         sharer_ride_id = list(s.ride.id for s in request.user.sharer_set.all())
-        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume)\
-            .filter(Q(special_request=request.user.driver.special_info)|Q(special_request=''))\
-            .filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user)\
+        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume) \
+            .filter(Q(special_request=request.user.driver.special_info) | Q(special_request='')) \
+            .filter(Q(vehicle_type='-') | Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user) \
             .exclude(id__in=sharer_ride_id)
-        return render(request, 'ride/search_as_driver.html', {'has_result':True, 'search_results': search_results})
+        return render(request, 'ride/search_as_driver.html', {'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
 
+
 @login_required
 def home(request):
-    owner_ride=request.user.ride_set.all()
-    sharer=request.user.sharer_set.all()
-    sharer_ride=[s.ride for s in sharer]
+    owner_ride = request.user.ride_set.all()
+    sharer = request.user.sharer_set.all()
+    sharer_ride = [s.ride for s in sharer]
     if hasattr(request.user, "driver"):
-        driver_ride=request.user.driver.ride_set.all()
+        driver_ride = request.user.driver.ride_set.all()
     else:
-        driver_ride=[]
+        driver_ride = []
     return render(request, 'ride/home.html', {'owner': owner_ride, 'sharer': sharer_ride, 'driver': driver_ride});

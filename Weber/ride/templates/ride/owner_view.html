@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ride Information - Owner</title>
+</head>
+<body>
+    <h2>View Your Ride Information - Owner</h2>
+    Owner Information: {{ ride.owner }}<br>
+    Number of Owners: {{ ride.num_owners }}<br>
+    Destination: {{ ride.destination }}<br>
+    Arrival Time: {{ ride.arrival_time }}<br>
+    Vehicle Type: {{ ride.vehicle_type }}<br>
+    Special Request: {{ ride.special_request }}<br>
+    Allow Share? {{ ride.allow_share }}<br>
+    Number of Passengers: {{ ride.num_passengers }}<br>
+    <br>
+    Status: {{ ride.status }}<br>
+    {% if confirm %}
+    <h3>Driver Information:</h3>
+    Driver: {{ ride.driver }}<br>
+    License: {{ ride.license }}<br>
+    Max Volume: {{ ride.max_volume }}<br>
+    {% endif %}
+
+    <a href="{% url 'ride:owner_update'%}">Edit Ride</a><br>
+    <a href="{% url 'ride:home'%}"> Return to Home</a>
+</body>
+</html>
