@@ -15,7 +15,7 @@
       Max passenger number: {{user.driver.max_volume}}</br>
       Special info: {{user.driver.special_info}}</br></br>
     {% else %}
-      <a href="{% url 'user:add_driver'%}"> Want to become a driver? </a>
+      <a href="{% url 'user:add_driver'%}"> Want to become a driver? </a></br>
     {% endif %}
     <a href="{% url 'user:change_info'%}"> Edit info </a></br>
     </br><a href="{% url 'ride:home'%}"> back </a>

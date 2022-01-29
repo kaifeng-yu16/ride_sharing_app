@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 VEHICLE_TYPE = {
-    ("-", "-"),
     ("Comfort", "Comfort"),
     ("Luxury", "Luxury"),
     ("Sports", "Sports"),

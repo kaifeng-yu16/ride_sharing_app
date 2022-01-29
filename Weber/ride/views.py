@@ -52,7 +52,7 @@ def home(request):
     sharer=request.user.sharer_set.all()
     sharer_ride=[s.ride for s in sharer]
     if hasattr(request.user, "driver"):
-        driver_ride=request.user.driver.ride_set_all()
+        driver_ride=request.user.driver.ride_set.all()
     else:
         driver_ride=[]
     return render(request, 'ride/home.html', {'owner': owner_ride, 'sharer': sharer_ride, 'driver': driver_ride});
