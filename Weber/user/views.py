@@ -70,7 +70,7 @@ def change_info(request):
             return HttpResponseRedirect(reverse('ride:home'))
         else:
             messages.add_message(request, messages.INFO, 'Something went wrong when editing user profile. Please try again!')
-            return render(request, 'user/change_info.html', {'user_form': user_form, 'driver_form': driver_form})
+            return HttpResponseRedirect(reverse('ride:home'))
 
 
 @login_required
