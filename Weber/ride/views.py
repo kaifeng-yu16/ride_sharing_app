@@ -9,6 +9,7 @@ from .models import Ride, Sharer
 from django.db.models import Q
 from .forms import OwnerRideForm
 from django.utils import timezone
+from django.core.mail import send_mail
 # Create your views here.
 
 @login_required
@@ -105,6 +106,20 @@ def driver_join(request, ride_id):
             ride.status = 'confirm'
             ride.driver = request.user.driver
             ride.save()
+            send_mail(
+                'Driver has confirmed your ride!',
+                'Your ride has been confirmed by driver.',
+                'weber-easy-ride@outlook.com',
+                [ride.owner.email],
+            )
+            sharer_emails = list(s.email for s in request.user.sharer_set.all())
+            if len(sharer_emails) != 0:
+                send_mail(
+                    'Driver has confirmed your ride!',
+                    'Your ride has been confirmed by driver.',
+                    'weber-easy-ride@outlook.com',
+                    sharer_emails,
+                )
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
         else:
