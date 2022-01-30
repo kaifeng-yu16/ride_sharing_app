@@ -13,6 +13,6 @@ urlpatterns = [
     path('sharer_join/<int:ride_id>/', views.sharer_join, name='sharer_join'),
     path('driver_view/<int:ride_id>/', views.driver_view, name='driver_view'),
     path('owner_view/<int:ride_id>/', views.owner_view, name='owner_view'),
-    path('sharer_view/', views.sharer_view, name='sharer_view'),
+    path('sharer_view/<int:ride_id>/', views.sharer_view, name='sharer_view'),
     path('home/', views.home, name='home'),
 ]

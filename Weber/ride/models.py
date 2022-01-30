@@ -35,7 +35,7 @@ class Ride(models.Model):
      driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True)
 
      def __str__(self):
-          return '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(self.owner.username, self.num_owners, self.destination, self.status,\
+          return '%s_%s_%s_%s_%s_%s_%s_%s_%s_%s'%(self.id, self.owner.username, self.num_owners, self.destination, self.status,\
                                             self.arrival_time, self.vehicle_type, self.allow_share, self.special_request,\
                                             self.driver)
 

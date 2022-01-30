@@ -166,8 +166,17 @@ def search_as_driver(request):
 @login_required
 def home(request):
     owner_ride=request.user.ride_set.all()
+    print(type(owner_ride))
     sharer=request.user.sharer_set.all()
-    sharer_ride=[s.ride for s in sharer]
+    sharer_ride=request.user.ride_set.none()
+    print(type(sharer_ride))
+    for s in sharer:
+        sharer_ride |= Ride.objects.filter(pk=s.ride.pk)
+    print(sharer)
+    print(sharer_ride)
+    #sharer_ride=list(s.ride for s in sharer)
+    #print(sharer_ride[0])
+    print(type(sharer_ride))
     if hasattr(request.user, "driver"):
         driver_ride=request.user.driver.ride_set.all()
     else:
