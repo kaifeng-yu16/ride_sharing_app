@@ -6,7 +6,7 @@
 </head>
 <body>
     <h3>Search Ride As A Sharer</h3>
-    <form action={% url 'ride:search_as_sharer' %} method="post">
+    <form action="{% url 'ride:search_as_sharer' %}" method="post">
         {% csrf_token %}
         Destination: <input type="text" name="destination" required><br>
         Acceptable Arrival Time: between <input type="datetime-local" name="early_time" min=0000-01-01T00:00 max=9999-12-31T23:59 required> 
