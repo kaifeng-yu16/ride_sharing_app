@@ -133,3 +133,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/ride/home'
 LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/'
+
+# Email settings
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'weber-easy-ride@outlook.com'
+EMAIL_HOST_PASSWORD = 'Ride_Sharing_Service'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
