@@ -34,10 +34,7 @@
                 <td>{{ ride.arrival_time }}</td>
                 <td>{{ ride.vehicle_type }}</td>
                 <td>
-                    <form action={% url 'ride:sharer_join' ride.id %} method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="select">
-                    </form><br>
+                    <a href={% url 'ride:sharer_join' ride.id %}>select</a></br>
                 </td>
             </tr>
         {% endfor %}
