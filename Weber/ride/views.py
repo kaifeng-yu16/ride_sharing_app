@@ -72,7 +72,24 @@ def driver_edit(request):
     return HttpResponseRedirect(reverse('ride:home'))
 
 @login_required
-def sharer_join(request, ride_id):
+def sharer_join(request):
+    return HttpResponseRedirect(reverse('ride:home'))
+
+@login_required
+def owner_update(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Exception as e:
+        return HttpResponse('The ride is not existed!')
+
+    if request.method == "GET":
+
+        return render(request, 'ride/owner_update.html', locals())
+    elif request.method == "POST":
+        pass
+
+@login_required
+def driver_join(request, ride_id):
     try:
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
@@ -98,23 +115,6 @@ def sharer_join(request, ride_id):
             return render(request, 'ride/driver_join.html', locals())
     else:
         return HttpResponse('This ride has been joined by other driver!')
-
-@login_required
-def owner_update(request, ride_id):
-    try:
-        ride = Ride.objects.get(id=ride_id)
-    except Exception as e:
-        return HttpResponse('The ride is not existed!')
-
-    if request.method == "GET":
-
-        return render(request, 'ride/owner_update.html', locals())
-    elif request.method == "POST":
-        pass
-
-@login_required
-def driver_join(request):
-    return HttpResponseRedirect(reverse('ride:home'))
 
 @login_required
 def create_ride(request):
