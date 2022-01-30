@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ride
 from django.db.models import Q
-from .forms import OwnerRideForm, DriverJoinForm
+from .forms import OwnerRideForm
 from django.utils import timezone
 # Create your views here.
 
