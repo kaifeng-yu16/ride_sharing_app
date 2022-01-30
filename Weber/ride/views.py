@@ -82,7 +82,7 @@ def sharer_join(request, ride_id):
     elif ride.status == 'open':
         if request.method == "POST":
             num_of_sharers = request.POST['num_of_sharers']
-            sharer = Sharer.objects.create(ride=ride, User=request.user, num_of_sharers=num_of_sharers)
+            sharer = Sharer.objects.create(ride=ride, sharer=request.user, num_of_sharers=num_of_sharers)
             ride.save()
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
