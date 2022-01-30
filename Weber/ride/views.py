@@ -98,8 +98,8 @@ def driver_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
-            driver_join_form = DriverJoinForm(request.POST, instance=ride)
-            driver_join_form.save()
+            #driver_join_form = DriverJoinForm(request.POST, instance=ride)
+            #driver_join_form.save()
             ride.status = 'confirm'
             ride.driver = request.user
             ride.vehicle_type = request.user.vehicle_type
