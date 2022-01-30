@@ -20,7 +20,7 @@
             <legend>Sharer Information:</legend>
             <p>Number of Sharers:  {{sharer_num}}</p>
         </fieldset>
-        <form action={% url 'ride:sharer_join' ride_id %} method="post">
+        <form action="{% url 'ride:sharer_join' ride_id %}" method="post">
             {% csrf_token %}
             Number of Sharers in your party: <input type="number" min='1' name="num_sharers" required><br>
             <input type="submit" value="join">
