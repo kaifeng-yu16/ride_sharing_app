@@ -98,15 +98,12 @@ def driver_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
-            #driver_join_form = DriverJoinForm(request.POST, instance=ride)
-            #driver_join_form.save()
             ride.status = 'confirm'
             ride.driver = request.user.driver
             ride.save()
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
         else:
-            driver_join_form = DriverJoinForm(instance=ride)
             return render(request, 'ride/driver_join.html', locals())
     else:
         return HttpResponse('This ride has been joined by other driver!')
