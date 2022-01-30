@@ -101,7 +101,7 @@ def driver_join(request, ride_id):
             #driver_join_form = DriverJoinForm(request.POST, instance=ride)
             #driver_join_form.save()
             ride.status = 'confirm'
-            ride.driver = request.user
+            ride.driver = request.user.driver
             ride.vehicle_type = request.user.vehicle_type
             ride.save()
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
