@@ -112,7 +112,7 @@ def driver_join(request, ride_id):
                 'weber-easy-ride@outlook.com',
                 [ride.owner.email],
             )
-            sharer_emails = list(s.email for s in request.user.sharer_set.all())
+            sharer_emails = list(s.user.email for s in request.user.sharer_set.all())
             if len(sharer_emails) != 0:
                 send_mail(
                     'Driver has confirmed your ride!',
