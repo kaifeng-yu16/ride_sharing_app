@@ -30,7 +30,7 @@
                 <td>{{ ride.arrival_time }}</td>
                 <td>{{ ride.special_request }}</td>
                 <td>
-                    <form action={% url 'ride:driver_join' %} method="post">
+                    <form action={% url 'ride:driver_join' ride.id %} method="post">
                         {% csrf_token %}
                         <input type="submit" value="join">
                     </form><br>

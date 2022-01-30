@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ride
 from django.db.models import Q
-from .forms import OwnerRideForm
+from .forms import OwnerRideForm, DriverJoinForm
 from django.utils import timezone
 # Create your views here.
 
@@ -55,12 +55,6 @@ def owner_edit(request, ride_id):
             messages.add_message(request, messages.INFO, 'Something went wrong when editing owner ride. Please try again!')
             return HttpResponseRedirect(reverse('ride:home'))
 
-
-
-
-
-    return HttpResponseRedirect(reverse('ride:home'))
-
 @login_required
 def sharer_view(request):
     return HttpResponseRedirect(reverse('ride:home'))
@@ -81,11 +75,29 @@ def driver_edit(request):
 def sharer_join(request, ride_id):
     try:
         ride = Ride.objects.get(id=ride_id)
-    except Exception as e:
-        messages.add_message(request, messages.INFO, 'Ride Not Found!')
-        return HttpResponseRedirect(reverse('ride:home'))
-    if request.method == "POST":
-        return HttpResponseRedirect(reverse('ride:home'))
+    except Ride.DoesNotExist:
+        return HttpResponse('This ride is not existed!')
+    if ride.status == 'cancel':
+        return HttpResponse('This ride was canceled by owner!')
+    elif ride.status == 'open':
+        if request.method == "POST":
+            driver_join_form = DriverJoinForm(request.POST, instance=ride)
+            if driver_join_form.is_valid():
+                driver_join_form.save()
+                ride.status = 'confirm'
+                ride.driver = request.user
+                ride.vehicle_type = request.user.vehicle_type
+                ride.save()
+                messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
+                return HttpResponseRedirect(reverse('ride:home'))
+            else:
+                messages.add_message(request, messages.INFO, 'Something went wrong when joining the ride. Please try again!')
+                return HttpResponseRedirect(reverse('ride:home'))
+        else:
+            driver_join_form = DriverJoinForm(instance=ride)
+            return render(request, 'ride/driver_join.html', locals())
+    else:
+        return HttpResponse('This ride has been joined by other driver!')
 
 @login_required
 def owner_update(request, ride_id):
