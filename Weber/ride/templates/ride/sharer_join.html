@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sharer Join</title>
+</head>
+<body>
+    <h2>Ride Information</h2>
+        <h3>Status:  {{ ride.status }}</h3>
+        <fieldset>
+            <legend>Ride Information:</legend>
+                <p>Number of Owners:  {{ ride.num_owners }}</p>
+                <p>Destination:  {{ ride.destination }}</p>
+                <p>Arrival Time:  {{ ride.arrival_time }}</p>
+                <p>Requested Vehicle Type:  {{ ride.vehicle_type }}</p>
+                <p>Special Request:  {{ ride.special_request }}</p>
+                <p>Allow Share?  {{ ride.allow_share }}</p>
+        </fieldset>
+        <fieldset>
+            <legend>Sharer Information:</legend>
+            <p>Number of Sharers:  {{sharer_num}}</p>
+        </fieldset>
+        <form action={% url 'ride:sharer_join' ride_id %} method="post">
+            {% csrf_token %}
+            Number of Sharers in your party: <input type="number" min='1' name="num_sharers" required><br>
+            <input type="submit" value="join">
+        </form><br>
+        <a href="{% url 'ride:home' %}">back</a></br>
+</body>
+</html>

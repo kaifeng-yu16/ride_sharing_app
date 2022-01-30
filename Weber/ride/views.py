@@ -5,7 +5,7 @@ from django.db import models
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Ride
+from .models import Ride, Sharer
 from django.db.models import Q
 from .forms import OwnerRideForm
 from django.utils import timezone
@@ -81,7 +81,8 @@ def sharer_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
-            ride.sharer += request.user
+            num_sharers = request.POST['num_sharers']
+            sharer = Sharer.objects.create(ride=ride, user=request.user, num_of_sharers=num_sharers)
             ride.save()
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
@@ -89,19 +90,6 @@ def sharer_join(request, ride_id):
             return render(request, 'ride/sharer_join.html', locals())
     else:
         return HttpResponse('This ride has been confirmed by driver! Find another open ride to join!')
-
-@login_required
-def owner_update(request, ride_id):
-    try:
-        ride = Ride.objects.get(id=ride_id)
-    except Exception as e:
-        return HttpResponse('The ride is not existed!')
-
-    if request.method == "GET":
-
-        return render(request, 'ride/owner_update.html', locals())
-    elif request.method == "POST":
-        pass
 
 @login_required
 def driver_join(request, ride_id):
