@@ -81,8 +81,8 @@ def sharer_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
-            num_sharers = request.POST['num_sharers']
-            sharer = Sharer.objects.create(ride=ride, user=request.user, num_of_sharers=num_sharers)
+            num_of_sharers = request.POST['num_of_sharers']
+            sharer = Sharer.objects.create(ride=ride, user=request.user, num_of_sharers=num_of_sharers)
             ride.save()
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
