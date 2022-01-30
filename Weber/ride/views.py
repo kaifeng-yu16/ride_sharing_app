@@ -102,7 +102,7 @@ def driver_join(request, ride_id):
             #driver_join_form.save()
             ride.status = 'confirm'
             ride.driver = request.user.driver
-            ride.vehicle_type = request.user.vehicle_type
+            ride.vehicle_type = request.user.driver.vehicle_type
             ride.save()
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
