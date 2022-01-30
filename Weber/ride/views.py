@@ -99,17 +99,13 @@ def driver_join(request, ride_id):
     elif ride.status == 'open':
         if request.method == "POST":
             driver_join_form = DriverJoinForm(request.POST, instance=ride)
-            if driver_join_form.is_valid():
-                driver_join_form.save()
-                ride.status = 'confirm'
-                ride.driver = request.user
-                ride.vehicle_type = request.user.vehicle_type
-                ride.save()
-                messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
-                return HttpResponseRedirect(reverse('ride:home'))
-            else:
-                messages.add_message(request, messages.INFO, 'Something went wrong when joining the ride. Please try again!')
-                return HttpResponseRedirect(reverse('ride:home'))
+            driver_join_form.save()
+            ride.status = 'confirm'
+            ride.driver = request.user
+            ride.vehicle_type = request.user.vehicle_type
+            ride.save()
+            messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
+            return HttpResponseRedirect(reverse('ride:home'))
         else:
             driver_join_form = DriverJoinForm(instance=ride)
             return render(request, 'ride/driver_join.html', locals())
@@ -120,7 +116,7 @@ def driver_join(request, ride_id):
 def create_ride(request):
     if request.method == "POST":
         owner = request.user
-        num_owners = request.POST['num'] 
+        num_owners = request.POST['num']
         num_passengers = num_owners
         destination = request.POST['destination']
         status = 'open'
