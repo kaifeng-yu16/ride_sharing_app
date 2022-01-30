@@ -88,7 +88,7 @@ def sharer_join(request, ride_id):
         else:
             return render(request, 'ride/sharer_join.html', locals())
     else:
-        return HttpResponse('This ride has been confirmed by driver! Find another available ride to join!')
+        return HttpResponse('This ride has been confirmed by driver! Find another open ride to join!')
 
 @login_required
 def owner_update(request, ride_id):
