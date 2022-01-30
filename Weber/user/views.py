@@ -66,6 +66,8 @@ def change_info(request):
             user_form.save()
             if hasattr(request.user, 'driver'):
                 driver_form.save()
+                request.user.driver.max_volume = request.POST['Volume']
+                request.user.driver.save()
             messages.add_message(request, messages.INFO, 'Edit User Profile Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
         else:

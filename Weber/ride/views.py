@@ -7,28 +7,58 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ride
 from django.db.models import Q
+from .forms import OwnerRideForm
+from django.utils import timezone
 # Create your views here.
 
 @login_required
 def owner_view(request, ride_id):
     try:
         ride = Ride.objects.get(id=ride_id)
-    except Exception as e:
-        return HttpResponse('The ride is not existed!')
-
-    if ride.status == 'open':
-        open = True
-    if ride.status == 'confirm':
-        confirm = True
-    if ride.allow_share:
-        share = True
-    if request.method == "GET":
-        return render(request, 'ride/owner_update.html', locals())
-    elif request.method == "POST":
-        pass
+    except Ride.DoesNotExist:
+        return HttpResponse('This ride is not existed!')
+    sharer_num = len(ride.sharer_set.all())
+    return render(request, 'ride/owner_view.html', locals())
 
 @login_required
-def owner_edit(request):
+def owner_edit(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return HttpResponse('This ride is not existed!')
+    if ride.status != 'open':
+        return HttpResponse('This ride can not be edit!')
+    if len(ride.sharer_set.all()) == 0:
+        not_shared = True
+    time = timezone.localtime(ride.arrival_time).strftime('%Y-%m-%dT%H:%M')
+    if request.method == "GET":
+        owner_form = OwnerRideForm(instance=ride)
+        return render(request, 'ride/owner_update.html', locals())
+    else:
+        owner_form = OwnerRideForm(request.POST, instance=ride)
+        if 'cancel' in request.POST:
+            ride.status = 'cancel'
+            ride.save()
+            messages.add_message(request, messages.INFO, 'Cancel a ride!')
+            return HttpResponseRedirect(reverse('ride:home'))
+        if owner_form.is_valid():
+            owner_form.save()
+            num_old = ride.num_owners
+            num_new =  int(request.POST['num_owner'])
+            ride.num_passengers += (num_new - num_old)
+            ride.num_owners = request.POST['num_owner']
+            ride.arrival_time = request.POST['arrival_time']
+            ride.save()
+            messages.add_message(request, messages.INFO, 'Successfully update owner ride!')
+            return HttpResponseRedirect(reverse('ride:home'))
+        else:
+            messages.add_message(request, messages.INFO, 'Something went wrong when editing owner ride. Please try again!')
+            return HttpResponseRedirect(reverse('ride:home'))
+
+
+
+
+
     return HttpResponseRedirect(reverse('ride:home'))
 
 @login_required

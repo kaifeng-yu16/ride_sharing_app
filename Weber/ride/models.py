@@ -17,6 +17,7 @@ RIDE_STATUS = {
     ("open", "open"),
     ("confirm", "confirm"),
     ("complete", "complete"),
+    ("cancel", "cancel"),
 }
 class Ride(models.Model):
      # from owner side
@@ -27,7 +28,7 @@ class Ride(models.Model):
      status = models.CharField(default='open', choices=RIDE_STATUS, max_length=10)
      arrival_time = models.DateTimeField()
      allow_share = models.BooleanField(default=False)
-     vehicle_type = models.CharField(max_length=10, choices=VEHICLE_TYPE)
+     vehicle_type = models.CharField(max_length=10, choices=VEHICLE_TYPE, default='-')
      special_request = models.TextField(blank=True, default='')
 
      # from driver side

@@ -14,7 +14,7 @@
           <h3>Vehicle info</h3>
           Vehicle type: {{driver_form.vehicle_type}}</br>
           License plate number: {{driver_form.license}}</br>
-          Max passenger number: {{driver_form.max_volume}}</br>
+          Maximum number of passengers: <input type="number"  name="Volume" value="{{user.driver.max_volume}}" min="1" required><br/>
           Special info: {{driver_form.special_info}}</br></br>
           <input type="checkbox" name="driver_del"> Check this box if you do not want to be a driver anymore.</br>
         {% endif %}

@@ -36,7 +36,7 @@
           <th>{{o.arrival_time}}</th>
           <th>OWNER</th>
           <th>{{o.status}}</th>
-          <th><a href="/ride/owner_view/{{ o.id }}">view detail</a></th>
+          <th><a href="{% url 'ride:owner_view' o.id %}">view detail</a></th>
         </tr>
       {% endfor %}
       {% for s in sharer %}
@@ -45,7 +45,7 @@
           <th>{{s.arrival_time}}</th>
           <th>SHARER</th>
           <th>{{s.status}}</th>
-          <th><a href="{% url 'ride:sharer_view' %}">view detail</a></th>
+          <th><a href="{% url 'ride:sharer_view' s.id %}">view detail</a></th>
         </tr>
       {% endfor %}
       {% for d in driver %}
@@ -54,7 +54,7 @@
           <th>{{d.arrival_time}}</th>
           <th>DRIVER</th>
           <th>{{d.status}}</th>
-          <th><a href="{% url 'ride:driver_view' %}">view detail</a></th>
+          <th><a href="{% url 'ride:driver_view' d.id %}">view detail</a></th>
         </tr>
       {% endfor %}
       </table>
