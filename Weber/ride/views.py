@@ -71,7 +71,7 @@ def sharer_view(request, ride_id):
     sharer_num = len(ride.sharer_set.all())
     try:
         sharer = ride.sharer_set.get(sharer=request.user)
-    except Model.DoesNotExist:
+    except Sharer.DoesNotExist:
         return HttpResponse('This is not your ride. Can not view.')
     return render(request, 'ride/sharer_view.html', locals())
 
@@ -194,7 +194,7 @@ def driver_join(request, ride_id):
                 'weber-easy-ride@outlook.com',
                 [ride.owner.email],
             )
-            sharer_emails = list(s.sharer.email for s in request.user.sharer_set.all())
+            sharer_emails = list(s.sharer.email for s in ride.sharer_set.all())
             if len(sharer_emails) != 0:
                 send_mail(
                     'Driver has confirmed your ride!',
