@@ -7,11 +7,10 @@
 <body>
     <h2>View Your Ride Information</h2>
         <h3>Status:  {{ ride.status }}</h3>
-        <h3>Your Role:  Ride Owner </h3>
+        <h3>Your Role:  Ride Sharer </h3>
         <fieldset>
             <legend>Ride Information:</legend>
                 <p>Number of Passengers:  {{ ride.num_passengers }}</p>
-                <p>Number of People in Your Party:  {{ ride.num_owners }}</p>
                 <p>Destination:  {{ ride.destination }}</p>
                 <p>Arrival Time:  {{ ride.arrival_time }}</p>
                 <p>Requested Vehicle Type:  {{ ride.vehicle_type }}</p>
@@ -21,6 +20,7 @@
         <fieldset>
             <legend>Sharer Information:</legend>
             <p>Number of Sharers:  {{sharer_num}}</p>
+            <p>Number of People in Your Party:  {{ sharer.num_of_sharers }}</p>
         </fieldset>
         {% if ride.driver %}
         <fieldset>
@@ -33,7 +33,7 @@
         </fieldset>
         {% elif ride.status == 'open' %}
             </br>
-            <a href="{% url 'ride:owner_edit' ride_id %}">edit</a></br>
+            <a href="{% url 'ride:sharer_edit' ride_id %}">edit</a></br>
         {% endif %}
         <a href="{% url 'ride:home' %}">back</a></br>
 </body>

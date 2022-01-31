@@ -8,11 +8,10 @@
     <h3>Search Ride As A Sharer</h3>
     <form action={% url 'ride:search_as_sharer' %} method="post">
         {% csrf_token %}
-        Destination: <input type="text" name="destination" required><br>
+        Destination: <input type="text" name="destination" required></br>
         Acceptable Arrival Time: between <input type="datetime-local" name="early_time" min=0000-01-01T00:00 max=9999-12-31T23:59 required> 
-                and <input type="datetime-local" name="late_time" min=0000-01-01T00:00 max=9999-12-31T23:59 required><br>
-        Number of Sharers in your party: <input type="number" min='1' name="num_sharers" required><br>
-        <input type="submit" value="Search Ride">
+                and <input type="datetime-local" name="late_time" min=0000-01-01T00:00 max=9999-12-31T23:59 required></br>
+        </br><input type="submit" value="Search Ride">
     </form><br>
 
     {% if has_result %}

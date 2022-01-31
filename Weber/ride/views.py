@@ -17,6 +17,8 @@ def owner_view(request, ride_id):
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
         return HttpResponse('This ride is not existed!')
+    if ride.owner != request.user:
+        return HttpResponse('This is not your ride. Can not view.')
     sharer_num = len(ride.sharer_set.all())
     return render(request, 'ride/owner_view.html', locals())
 
@@ -26,6 +28,8 @@ def owner_edit(request, ride_id):
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
         return HttpResponse('This ride is not existed!')
+    if ride.owner != request.user:
+        return HttpResponse('This is not your ride. Can not edit.')
     if ride.status != 'open':
         return HttpResponse('This ride can not be edit!')
     if len(ride.sharer_set.all()) == 0:
@@ -47,6 +51,8 @@ def owner_edit(request, ride_id):
             num_new =  int(request.POST['num_owner'])
             ride.num_passengers += (num_new - num_old)
             ride.num_owners = request.POST['num_owner']
+            if len(ride.sharer_set.all()) != 0:
+                ride.allow_share=True
             ride.arrival_time = request.POST['arrival_time']
             ride.save()
             messages.add_message(request, messages.INFO, 'Successfully update owner ride!')
@@ -57,18 +63,85 @@ def owner_edit(request, ride_id):
 
 @login_required
 def sharer_view(request, ride_id):
-    return HttpResponseRedirect(reverse('ride:home'))
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return HttpResponse('This ride is not existed!')
+    sharer_num = len(ride.sharer_set.all())
+    try:
+        sharer = ride.sharer_set.get(sharer=request.user)
+    except Model.DoesNotExist:
+        return HttpResponse('This is not your ride. Can not view.')
+    return render(request, 'ride/sharer_view.html', locals())
 
 @login_required
-def sharer_edit(request):
-    return HttpResponseRedirect(reverse('ride:home'))
+def sharer_edit(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return HttpResponse('This ride is not existed!')
+    try:
+        sharer = ride.sharer_set.get(sharer=request.user)
+    except Model.DoesNotExist:
+        return HttpResponse('This is not your ride. Can not edit.')
+    if ride.status != 'open':
+        return HttpResponse('This ride can not be edit!')
+    if request.method == "GET":
+        return render(request, 'ride/sharer_update.html', locals())
+    else:
+        if 'cancel' in request.POST:
+            ride.num_passengers -= sharer.num_of_sharers
+            ride.save()
+            ride.sharer_set.filter(sharer=request.user).delete()
+            messages.add_message(request, messages.INFO, 'Cancel a ride as sharer!')
+            return HttpResponseRedirect(reverse('ride:home'))
+        else:
+            num_old = sharer.num_of_sharers
+            num_new = int(request.POST['num_sharer'])
+            ride.num_passengers += (num_new - num_old)
+            ride.save()
+            sharer.num_of_sharers = request.POST['num_sharer']
+            sharer.save()
+            messages.add_message(request, messages.INFO, 'Successfully update sharer ride!')
+            return HttpResponseRedirect(reverse('ride:home'))
+
 
 @login_required
-def driver_view(request):
-    return HttpResponseRedirect(reverse('ride:home'))
+def driver_view(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return HttpResponse('This ride is not existed!')
+    try:
+        ride.driver
+        request.user.driver
+    except ObjectDoesNotExist:
+        return HttpResponse('This ride does not have a driver or you are not a driver. Can not view.')
+    else: 
+        if ride.driver != request.user.driver:
+            return HttpResponse('This is not your ride. Can not view.')
+    sharer_num = len(ride.sharer_set.all())
+    return render(request, 'ride/driver_view.html', locals())
 
 @login_required
-def driver_edit(request):
+def driver_edit(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return HttpResponse('This ride is not existed!')
+    try:
+        ride.driver
+        request.user.driver
+    except ObjectDoesNotExist:
+        return HttpResponse('This ride does not have a driver or you are not a driver. Can not edit.')
+    else: 
+        if ride.driver != request.user.driver:
+            return HttpResponse('This is not your ride. Can not edit.')
+    if ride.status != 'confirm':
+        return HttpResponse('This ride can not be edit!')
+    ride.status = 'complete'
+    ride.save()
+    messages.add_message(request, messages.INFO, 'Successfully complete a ride as driver!')
     return HttpResponseRedirect(reverse('ride:home'))
 
 @login_required
@@ -88,12 +161,16 @@ def sharer_join(request, ride_id):
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
         else:
+            sharer_num = len(ride.sharer_set.all())
             return render(request, 'ride/sharer_join.html', locals())
     else:
         return HttpResponse('This ride has been confirmed by driver! Find another open ride to join!')
 
 @login_required
 def driver_join(request, ride_id):
+    if not hasattr(request.user, 'driver'):
+        messages.add_message(request, messages.INFO, 'You are not a driver!')
+        return HttpResponseRedirect(reverse('ride:home'))
     try:
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
@@ -150,10 +227,10 @@ def search_as_sharer(request):
 
 @login_required
 def search_as_driver(request):
+    if not hasattr(request.user, 'driver'):
+        messages.add_message(request, messages.INFO, 'You are not a driver!')
+        return HttpResponseRedirect(reverse('ride:home'))
     if request.method == "POST":
-        if not hasattr(request.user, 'driver'):
-            messages.add_message(request, messages.INFO, 'You are not a driver!')
-            return HttpResponseRedirect(reverse('ride:home'))
         sharer_ride_id = list(s.ride.id for s in request.user.sharer_set.all())
         search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume)\
             .filter(Q(special_request=request.user.driver.special_info)|Q(special_request=''))\
@@ -166,16 +243,10 @@ def search_as_driver(request):
 @login_required
 def home(request):
     owner_ride=request.user.ride_set.all()
-    print(type(owner_ride))
     sharer=request.user.sharer_set.all()
     sharer_ride=request.user.ride_set.none()
-    print(type(sharer_ride))
     for s in sharer:
         sharer_ride |= Ride.objects.filter(pk=s.ride.pk)
-    print(sharer)
-    print(sharer_ride)
-    #sharer_ride=list(s.ride for s in sharer)
-    #print(sharer_ride[0])
     print(type(sharer_ride))
     if hasattr(request.user, "driver"):
         driver_ride=request.user.driver.ride_set.all()
