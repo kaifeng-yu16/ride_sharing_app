@@ -10,6 +10,8 @@
       Email: {{user.email}}</br></br>
     {% if user.driver%}
       <h3>Vehicle info</h3>
+      First Name: {{user.driver.first_name}}</br>
+      Last Name: {{user.driver.last_name}}</br>
       Vehicle type: {{user.driver.vehicle_type}}</br>
       License plate number: {{user.driver.license}}</br>
       Max passenger number: {{user.driver.max_volume}}</br>

@@ -11,6 +11,8 @@ VEHICLE_TYPE = {
 
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
     vehicle_type =  models.CharField(max_length=10, choices=VEHICLE_TYPE)
     license =  models.CharField(max_length=200)
     max_volume = models.PositiveIntegerField()

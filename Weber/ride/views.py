@@ -22,6 +22,7 @@ def owner_view(request, ride_id):
     if ride.owner != request.user:
         return HttpResponse('This is not your ride. Can not view.')
     sharer_num = len(ride.sharer_set.all())
+    sharers = ride.sharer_set.all()
     return render(request, 'ride/owner_view.html', locals())
 
 @login_required
@@ -71,6 +72,7 @@ def sharer_view(request, ride_id):
     except Ride.DoesNotExist:
         return HttpResponse('This ride is not existed!')
     sharer_num = len(ride.sharer_set.all())
+    sharers = ride.sharer_set.all()
     try:
         sharer = ride.sharer_set.get(sharer=request.user)
     except Sharer.DoesNotExist:
@@ -123,6 +125,7 @@ def driver_view(request, ride_id):
         if ride.driver != request.user.driver:
             return HttpResponse('This is not your ride. Can not view.')
     sharer_num = len(ride.sharer_set.all())
+    sharers = ride.sharer_set.all()
     return render(request, 'ride/driver_view.html', locals())
 
 @login_required
@@ -191,7 +194,7 @@ def driver_join(request, ride_id):
     elif ride.status == 'open':
         if request.method == "POST":
             if ride.status != 'open' or ride.num_passengers > request.user.driver.max_volume or \
-                    ride.special_request != request.user.driver.special_info or \
+                    (ride.special_request != '' and ride.special_request != request.user.driver.special_info) or \
                     (ride.vehicle_type != '-' and ride.vehicle_type != request.user.driver.vehicle_type) or \
                     (request.user.id, ) in ride.sharer_set.all().values_list('sharer') or \
                     request.user == ride.driver or request.user == ride.owner:

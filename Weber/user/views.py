@@ -35,11 +35,13 @@ def add_driver(request):
     if request.method == "GET":
         return render(request, 'user/add_driver.html')
     else:
+        first_name = request.POST['first']
+        last_name = request.POST['last']
         license = request.POST['License']
         vehicle_type = request.POST['Type']
         volume = request.POST['Volume']
         info = request.POST['Info']
-        d = Driver(user=request.user, vehicle_type=vehicle_type, license=license, max_volume=volume, special_info=info)
+        d = Driver(user=request.user, first_name=first_name, last_name=last_name, vehicle_type=vehicle_type, license=license, max_volume=volume, special_info=info)
         d.save()
         messages.add_message(request, messages.INFO, 'Create Driver Profile Successfully!')
         return HttpResponseRedirect(reverse('ride:home'))

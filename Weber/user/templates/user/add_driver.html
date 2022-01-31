@@ -7,6 +7,8 @@
   <h1>Driver info</h1>
     <form action={% url 'user:add_driver' %} method="post">
     {% csrf_token %}
+        First name: <input type="text" name="first" required><br/>
+        Last name: <input type="text" name="last" required><br/>
         License plate number: <input type="text" name="License" required><br/>
         Vehicle type:
         <select name="Type">

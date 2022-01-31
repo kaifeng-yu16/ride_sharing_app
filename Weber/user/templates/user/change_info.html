@@ -11,7 +11,11 @@
         Username: {{user.username}}</br>
         Email: {{user_form.email}}</br></br>
         {% if user.driver%}
-          <h3>Vehicle info</h3>
+          <h3>Driver info</h3>
+          First name: {{driver_form.first_name}}</br>
+          Last name: {{driver_form.last_name}}</br>
+          License plate number: {{driver_form.license}}</br>
+          License plate number: {{driver_form.license}}</br>
           Vehicle type: {{driver_form.vehicle_type}}</br>
           License plate number: {{driver_form.license}}</br>
           Maximum number of passengers: <input type="number"  name="Volume" value="{{user.driver.max_volume}}" min="1" required><br/>
