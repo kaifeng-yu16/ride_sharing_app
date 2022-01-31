@@ -1,0 +1,23 @@
+Danger log
+1. all urls that related to ride & user info require user to login first. (using @login_required tag)
+2. if a user is already a driver, cannot use url 'user/add_driver' to be a driver again
+3. if a driver does not complete all his rides as a driver, he can not delete his driver identity
+4. if a user tries to access a ride that does not exist by entering a wrong ride_id in the url, they will recieve a message informing them that the ride does not exist.
+5. ride owner/sharer/driver can only view his own rides. If a user tries to view other people'ride by entering specific url, they will recieve a message that they can not view the ride. A user can use urls to view their own rides.
+6. the owner or sharer of a ride can not use urls to edit ride information if the ride is not his or is not "open" anymore. 
+7. when user is entering a date and time to make a ride request or search for a ride or change ride info, they can not enter a time that is earlier than current time.
+8. if a ride already has sharers, the owner of that ride can not choose to disallow sharing the ride anymore.
+9. when requesting for a ride, sharing a ride or registering as a driver, the number of perople in the party can only be integer and not less than 1.
+10. a driver can not use a url to complete a ride if the ride is not his or is not "confirm" anymore.
+11. a user can not be two roles in one ride. For example, if a user is already the owner or a sharer of a ride, he can not join this ride again as a sharer or driver, if he tries to enter urls to do that, he will be rejected.
+12. sharer and driver can not join a ride if the arrival time of that ride is earlier than current time.
+13. if a user is not a driver, he can not search or join rides as a driver
+14. if a user click too fast when using our app, it might sent out more than one forms or request, but our server guarentees that it will only act once.
+
+
+
+
+
+
+
+

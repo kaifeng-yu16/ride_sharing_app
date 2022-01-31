@@ -19,7 +19,10 @@
             <legend>Sharer Information:</legend>
             <p>Number of Sharers:  {{sharer_num}}</p>
         </fieldset>
-        <a href="{% url 'ride:driver_join' ride_id %}">Join this Ride!</a><br>
+        <form action="{% url 'ride:driver_join' ride_id %}" method="post">
+        {% csrf_token %}
+            <input type="submit" value="join the ride">
+        </form></br>
         <a href="{% url 'ride:home' %}">back</a></br>
 </body>
 </html>

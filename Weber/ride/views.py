@@ -128,15 +128,13 @@ def driver_view(request, ride_id):
     sharers = ride.sharer_set.all()
     return render(request, 'ride/driver_view.html', locals())
 
+# driver use this function to complete a ride
 @login_required
 def driver_edit(request, ride_id):
     try:
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
         return HttpResponse('This ride is not existed!')
-    cur_time = timezone.now()
-    if ride.arrival_time < cur_time:
-        return HttpResponse('This ride is expired!')
     try:
         ride.driver
         request.user.driver
@@ -189,6 +187,9 @@ def driver_join(request, ride_id):
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
         return HttpResponse('This ride is not existed!')
+    cur_time = timezone.now()
+    if ride.arrival_time < cur_time:
+        return HttpResponse('This ride is expired!')
     if ride.status == 'cancel':
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
@@ -204,7 +205,7 @@ def driver_join(request, ride_id):
             ride.save()
             send_mail(
                 'Driver has confirmed your ride!',
-                'Your ride has been confirmed by driver.',
+                'Your owner ride has been confirmed by driver.',
                 'weber-easy-ride@outlook.com',
                 [ride.owner.email],
             )
@@ -212,13 +213,14 @@ def driver_join(request, ride_id):
             if len(sharer_emails) != 0:
                 send_mail(
                     'Driver has confirmed your ride!',
-                    'Your ride has been confirmed by driver.',
+                    'Your sharer ride has been confirmed by driver.',
                     'weber-easy-ride@outlook.com',
                     sharer_emails,
                 )
             messages.add_message(request, messages.INFO, 'Join the Ride Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
         else:
+            sharer_num = len(ride.sharer_set.all())
             return render(request, 'ride/driver_join.html', locals())
     else:
         return HttpResponse('This ride has been joined by other driver!')
