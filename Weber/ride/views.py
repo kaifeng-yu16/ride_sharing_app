@@ -131,6 +131,9 @@ def driver_edit(request, ride_id):
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
         return HttpResponse('This ride is not existed!')
+    cur_time = timezone.now()
+    if ride.arrival_time < cur_time:
+        return HttpResponse('This ride is expired!')
     try:
         ride.driver
         request.user.driver
@@ -152,6 +155,9 @@ def sharer_join(request, ride_id):
         ride = Ride.objects.get(id=ride_id)
     except Ride.DoesNotExist:
         return HttpResponse('This ride is not existed!')
+    cur_time = timezone.now()
+    if ride.arrival_time < cur_time:
+        return HttpResponse('This ride is expired!')
     if ride.status == 'cancel':
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
@@ -236,7 +242,6 @@ def create_ride(request):
         return HttpResponseRedirect(reverse('ride:home'))
     else:
         time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
-        print(time)
         return render(request, 'ride/create_ride.html', {'time': time})
 
 @login_required
