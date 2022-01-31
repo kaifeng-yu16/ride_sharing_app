@@ -84,7 +84,7 @@ def sharer_edit(request, ride_id):
         return HttpResponse('This ride is not existed!')
     try:
         sharer = ride.sharer_set.get(sharer=request.user)
-    except Model.DoesNotExist:
+    except Sharer.DoesNotExist:
         return HttpResponse('This is not your ride. Can not edit.')
     if ride.status != 'open':
         return HttpResponse('This ride can not be edit!')
