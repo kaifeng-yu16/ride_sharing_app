@@ -22,6 +22,8 @@
         {% endfor %}
       {% endif %}
     <h3>Current Rides</h3>
+      <fieldset>
+        <legend>Owner Ride:</legend>
       <table border=solid cellspacing=10>
       <tr>
         <th>Destination</th>
@@ -39,6 +41,18 @@
           <th><a href="{% url 'ride:owner_view' o.id %}">view detail</a></th>
         </tr>
       {% endfor %}
+      </table>
+      </fieldset>
+      <fieldset>
+        <legend>Sharer Ride:</legend>
+      <table border=solid cellspacing=10>
+      <tr>
+        <th>Destination</th>
+        <th>Arrival Time</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Operation</th>
+      </tr>
       {% for s in sharer %}
         <tr>
           <th>{{s.destination}}</th>
@@ -48,6 +62,18 @@
           <th><a href="{% url 'ride:sharer_view' s.id %}">view detail</a></th>
         </tr>
       {% endfor %}
+      </table>
+      </fieldset>
+      <fieldset>
+        <legend>Driver Ride:</legend>
+      <table border=solid cellspacing=10>
+      <tr>
+        <th>Destination</th>
+        <th>Arrival Time</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Operation</th>
+      </tr>
       {% for d in driver %}
         <tr>
           <th>{{d.destination}}</th>
@@ -58,6 +84,7 @@
         </tr>
       {% endfor %}
       </table>
+      </fieldset>
     <h3>New Rides</h3>
       <a href="{% url 'ride:create_ride' %}">
       <input type=button value='Proceed as Ride Owner'></a></br>

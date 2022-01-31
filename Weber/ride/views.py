@@ -154,7 +154,7 @@ def sharer_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
-            if not ride.allow_share or ride.status != 'open' or request.user in ride.sharer_set:
+            if not ride.allow_share or ride.status != 'open' or request.user in ride.sharer_set.all().values_list('sharer'):
                 return HttpResponse('Invalid Access!')
             num_of_sharers = request.POST['num_of_sharers']
             sharer = Sharer.objects.create(ride=ride, sharer=request.user, num_of_sharers=num_of_sharers)
@@ -262,14 +262,14 @@ def search_as_driver(request):
 
 @login_required
 def home(request):
-    owner_ride=request.user.ride_set.all()
+    owner_ride=request.user.ride_set.all().order_by('-status')
     sharer=request.user.sharer_set.all()
     sharer_ride=request.user.ride_set.none()
     for s in sharer:
         sharer_ride |= Ride.objects.filter(pk=s.ride.pk)
-    print(type(sharer_ride))
+    sharer_ride=sharer_ride.order_by('-status')
     if hasattr(request.user, "driver"):
-        driver_ride=request.user.driver.ride_set.all()
+        driver_ride=request.user.driver.ride_set.all().order_by('-status')
     else:
         driver_ride=[]
     return render(request, 'ride/home.html', {'owner': owner_ride, 'sharer': sharer_ride, 'driver': driver_ride});
