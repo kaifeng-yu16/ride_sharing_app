@@ -49,7 +49,7 @@ def owner_edit(request, ride_id):
         if owner_form.is_valid():
             owner_form.save()
             num_old = ride.num_owners
-            num_new =  int(request.POST['num_owner'])
+            num_new = int(request.POST['num_owner'])
             ride.num_passengers += (num_new - num_old)
             ride.num_owners = request.POST['num_owner']
             if len(ride.sharer_set.all()) != 0:
@@ -106,7 +106,6 @@ def sharer_edit(request, ride_id):
             messages.add_message(request, messages.INFO, 'Successfully update sharer ride!')
             return HttpResponseRedirect(reverse('ride:home'))
 
-
 @login_required
 def driver_view(request, ride_id):
     try:
@@ -118,7 +117,7 @@ def driver_view(request, ride_id):
         request.user.driver
     except ObjectDoesNotExist:
         return HttpResponse('This ride does not have a driver or you are not a driver. Can not view.')
-    else: 
+    else:
         if ride.driver != request.user.driver:
             return HttpResponse('This is not your ride. Can not view.')
     sharer_num = len(ride.sharer_set.all())
@@ -135,7 +134,7 @@ def driver_edit(request, ride_id):
         request.user.driver
     except ObjectDoesNotExist:
         return HttpResponse('This ride does not have a driver or you are not a driver. Can not edit.')
-    else: 
+    else:
         if ride.driver != request.user.driver:
             return HttpResponse('This is not your ride. Can not edit.')
     if ride.status != 'confirm':
@@ -155,6 +154,8 @@ def sharer_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
+            if not ride.allow_share or ride.status != 'open' or request.user in ride.sharer_set:
+                return HttpResponse('Invalid Access!')
             num_of_sharers = request.POST['num_of_sharers']
             sharer = Sharer.objects.create(ride=ride, sharer=request.user, num_of_sharers=num_of_sharers)
             ride.num_passengers += int(num_of_sharers)
@@ -180,6 +181,10 @@ def driver_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
+            if ride.status != 'open' or ride.num_passengers > request.user.driver.max_volume or \
+                    ride.special_request != request.user.driver.special_info or \
+                    (ride.vehicle_type != '-' and ride.vehicle_type != request.user.driver.vehicle_type):
+                return HttpResponse('Invalid Access!')
             ride.status = 'confirm'
             ride.driver = request.user.driver
             ride.save()
@@ -219,8 +224,8 @@ def create_ride(request):
             allow_share = False
         vehicle_type = request.POST['vehicle']
         special_request = request.POST['request']
-        ride = Ride.objects.create(owner=owner, num_owners=num_owners, num_passengers=num_passengers,\
-                                   destination=destination, status=status, arrival_time=arrival_time,\
+        ride = Ride.objects.create(owner=owner, num_owners=num_owners, num_passengers=num_passengers, \
+                                   destination=destination, status=status, arrival_time=arrival_time, \
                                    vehicle_type=vehicle_type, allow_share=allow_share, special_request=special_request)
         messages.add_message(request, messages.INFO, 'Ride Create Successfully!')
         return HttpResponseRedirect(reverse('ride:home'))
@@ -247,11 +252,11 @@ def search_as_driver(request):
         return HttpResponseRedirect(reverse('ride:home'))
     if request.method == "POST":
         sharer_ride_id = list(s.ride.id for s in request.user.sharer_set.all())
-        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume)\
-            .filter(Q(special_request=request.user.driver.special_info)|Q(special_request=''))\
-            .filter(Q(vehicle_type='-')|Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user)\
+        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume) \
+            .filter(Q(special_request=request.user.driver.special_info) | Q(special_request='')) \
+            .filter(Q(vehicle_type='-') | Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user) \
             .exclude(id__in=sharer_ride_id)
-        return render(request, 'ride/search_as_driver.html', {'has_result':True, 'search_results': search_results})
+        return render(request, 'ride/search_as_driver.html', {'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
 
