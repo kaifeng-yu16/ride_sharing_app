@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView
@@ -84,7 +85,7 @@ def sharer_edit(request, ride_id):
         return HttpResponse('This ride is not existed!')
     try:
         sharer = ride.sharer_set.get(sharer=request.user)
-    except Model.DoesNotExist:
+    except Sharer.DoesNotExist:
         return HttpResponse('This is not your ride. Can not edit.')
     if ride.status != 'open':
         return HttpResponse('This ride can not be edit!')
@@ -184,7 +185,9 @@ def driver_join(request, ride_id):
         if request.method == "POST":
             if ride.status != 'open' or ride.num_passengers > request.user.driver.max_volume or \
                     ride.special_request != request.user.driver.special_info or \
-                    (ride.vehicle_type != '-' and ride.vehicle_type != request.user.driver.vehicle_type):
+                    (ride.vehicle_type != '-' and ride.vehicle_type != request.user.driver.vehicle_type) or \
+                    request.user in ride.sharer_set.all().values_list('sharer') or \
+                    request.user == ride.driver or request.user == ride.owner:
                 return HttpResponse('Invalid Access!')
             ride.status = 'confirm'
             ride.driver = request.user.driver
@@ -243,7 +246,7 @@ def search_as_sharer(request):
         late_time = request.POST['late_time']
         search_results = Ride.objects.filter(destination=destination, status='open',
                                              arrival_time__range=(early_time, late_time),
-                                             allow_share=True).exclude(owner=request.user)
+                                             allow_share=True).exclude(owner=request.user).order_by('arrival_time')
         return render(request, 'ride/search_as_sharer.html', {'has_result': True, 'search_results': search_results})
     else:
         cur_time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
@@ -261,7 +264,7 @@ def search_as_driver(request):
                                              arrival_time__gte=cur_time) \
             .filter(Q(special_request=request.user.driver.special_info) | Q(special_request='')) \
             .filter(Q(vehicle_type='-') | Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user) \
-            .exclude(id__in=sharer_ride_id)
+            .exclude(id__in=sharer_ride_id).order_by('arrival_time')
         return render(request, 'ride/search_as_driver.html', {'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
