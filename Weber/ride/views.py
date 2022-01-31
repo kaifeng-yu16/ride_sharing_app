@@ -163,9 +163,10 @@ def sharer_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
-            if not ride.allow_share or ride.status != 'open' or (request.user.id, ) in ride.sharer_set.all().values_list('sharer') \
-                    or request.user == ride.owner:
+            if not ride.allow_share or ride.status != 'open' or request.user == ride.owner:
                 return HttpResponse('Invalid Access!')
+            if (request.user.id, ) in ride.sharer_set.all().values_list('sharer'):
+                return HttpResponse('You have already joined this ride!')
             num_of_sharers = request.POST['num_of_sharers']
             sharer = Sharer.objects.create(ride=ride, sharer=request.user, num_of_sharers=num_of_sharers)
             ride.num_passengers += int(num_of_sharers)
@@ -256,9 +257,11 @@ def search_as_sharer(request):
         destination = request.POST['destination']
         early_time = request.POST['early_time']
         late_time = request.POST['late_time']
+        sharer_ride_id = list(s.ride.id for s in request.user.sharer_set.all())
         search_results = Ride.objects.filter(destination=destination, status='open',
                                              arrival_time__range=(early_time, late_time),
-                                             allow_share=True).exclude(owner=request.user).order_by('arrival_time')
+                                             allow_share=True).exclude(owner=request.user)\
+                                             .exclude(id__in=sharer_ride_id).order_by('arrival_time')
         return render(request, 'ride/search_as_sharer.html', {'time': cur_time, 'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_sharer.html', {'time': cur_time})
