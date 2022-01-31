@@ -36,6 +36,7 @@ def owner_edit(request, ride_id):
     if len(ride.sharer_set.all()) == 0:
         not_shared = True
     time = timezone.localtime(ride.arrival_time).strftime('%Y-%m-%dT%H:%M')
+    cur_time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
     if request.method == "GET":
         owner_form = OwnerRideForm(instance=ride)
         return render(request, 'ride/owner_update.html', locals())
@@ -230,7 +231,9 @@ def create_ride(request):
         messages.add_message(request, messages.INFO, 'Ride Create Successfully!')
         return HttpResponseRedirect(reverse('ride:home'))
     else:
-        return render(request, 'ride/create_ride.html')
+        time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
+        print(time)
+        return render(request, 'ride/create_ride.html', {'time': time})
 
 @login_required
 def search_as_sharer(request):
@@ -243,7 +246,8 @@ def search_as_sharer(request):
                                              allow_share=True).exclude(owner=request.user)
         return render(request, 'ride/search_as_sharer.html', {'has_result': True, 'search_results': search_results})
     else:
-        return render(request, 'ride/search_as_sharer.html')
+        cur_time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
+        return render(request, 'ride/search_as_sharer.html', {'time': cur_time})
 
 @login_required
 def search_as_driver(request):
@@ -251,8 +255,10 @@ def search_as_driver(request):
         messages.add_message(request, messages.INFO, 'You are not a driver!')
         return HttpResponseRedirect(reverse('ride:home'))
     if request.method == "POST":
+        cur_time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
         sharer_ride_id = list(s.ride.id for s in request.user.sharer_set.all())
-        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume) \
+        search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume, \
+                                             arrival_time__gte=cur_time) \
             .filter(Q(special_request=request.user.driver.special_info) | Q(special_request='')) \
             .filter(Q(vehicle_type='-') | Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user) \
             .exclude(id__in=sharer_ride_id)

@@ -12,7 +12,7 @@
             <legend>Owner Information:</legend>
                 <p>Number of People in Your Party: <input type="number" min="1" name="num_owner" value="{{ ride.num_owners }}"></p>
                 <p>Destination: {{ owner_form.destination }}</p>
-                <p>Arrival Time: <input type="datetime-local" name="arrival_time" value="{{ time }}" min=0000-01-01T00:00 max=9999-12-31T23:59 required></p>
+                <p>Arrival Time: <input type="datetime-local" name="arrival_time" value="{{ time }}" min="{{ cur_time }}" max=9999-12-31T23:59 required></p>
                 <p>Requested Vehicle Type: {{ owner_form.vehicle_type }}</p>
                 <p>Special Request:  {{ owner_form.special_request }}</p>
                 {% if not_shared %}
