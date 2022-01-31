@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView
@@ -242,7 +243,7 @@ def search_as_sharer(request):
         late_time = request.POST['late_time']
         search_results = Ride.objects.filter(destination=destination, status='open',
                                              arrival_time__range=(early_time, late_time),
-                                             allow_share=True).exclude(owner=request.user)
+                                             allow_share=True).exclude(owner=request.user).order_by('arrival_time')
         return render(request, 'ride/search_as_sharer.html', {'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_sharer.html')
@@ -257,7 +258,7 @@ def search_as_driver(request):
         search_results = Ride.objects.filter(status='open', num_passengers__lte=request.user.driver.max_volume) \
             .filter(Q(special_request=request.user.driver.special_info) | Q(special_request='')) \
             .filter(Q(vehicle_type='-') | Q(vehicle_type=request.user.driver.vehicle_type)).exclude(owner=request.user) \
-            .exclude(id__in=sharer_ride_id)
+            .exclude(id__in=sharer_ride_id).order_by('arrival_time')
         return render(request, 'ride/search_as_driver.html', {'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_driver.html')
