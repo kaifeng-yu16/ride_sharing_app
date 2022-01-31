@@ -183,7 +183,9 @@ def driver_join(request, ride_id):
         if request.method == "POST":
             if ride.status != 'open' or ride.num_passengers > request.user.driver.max_volume or \
                     ride.special_request != request.user.driver.special_info or \
-                    (ride.vehicle_type != '-' and ride.vehicle_type != request.user.driver.vehicle_type):
+                    (ride.vehicle_type != '-' and ride.vehicle_type != request.user.driver.vehicle_type) or \
+                    request.user in ride.sharer_set.all().values_list('sharer') or \
+                    request.user == ride.driver or request.user == ride.owner:
                 return HttpResponse('Invalid Access!')
             ride.status = 'confirm'
             ride.driver = request.user.driver
