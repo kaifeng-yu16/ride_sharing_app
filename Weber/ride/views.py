@@ -257,9 +257,11 @@ def search_as_sharer(request):
         destination = request.POST['destination']
         early_time = request.POST['early_time']
         late_time = request.POST['late_time']
+        sharer_ride_id = list(s.ride.id for s in request.user.sharer_set.all())
         search_results = Ride.objects.filter(destination=destination, status='open',
                                              arrival_time__range=(early_time, late_time),
-                                             allow_share=True).exclude(owner=request.user).order_by('arrival_time')
+                                             allow_share=True).exclude(owner=request.user)\
+                                             .exclude(id__in=sharer_ride_id).order_by('arrival_time')
         return render(request, 'ride/search_as_sharer.html', {'time': cur_time, 'has_result': True, 'search_results': search_results})
     else:
         return render(request, 'ride/search_as_sharer.html', {'time': cur_time})
