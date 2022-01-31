@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# 注册中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+#主路由
 ROOT_URLCONF = 'Weber.urls'
 
 TEMPLATES = [
@@ -79,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rideShareServiceDB',
-        'USER': 'kaifeng',
-        'PASSWORD': 'kaifeng',
+        'USER': 'fm128',
+        'PASSWORD': 'fm128',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -131,3 +133,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/ride/home'
 LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/'
+
+# Email settings
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'weber-easy-ride@outlook.com'
+EMAIL_HOST_PASSWORD = 'Ride_Sharing_Service'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

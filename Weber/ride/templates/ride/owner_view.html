@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Ride</title>
+</head>
+<body>
+    <h2>View Your Ride Information</h2>
+        <h3>Status:  {{ ride.status }}</h3>
+        <h3>Your Role:  Ride Owner </h3>
+        <fieldset>
+            <legend>Ride Information:</legend>
+                <p>Number of Passengers:  {{ ride.num_passengers }}</p>
+                <p>Number of People in Your Party:  {{ ride.num_owners }}</p>
+                <p>Destination:  {{ ride.destination }}</p>
+                <p>Arrival Time:  {{ ride.arrival_time }}</p>
+                <p>Requested Vehicle Type:  {{ ride.vehicle_type }}</p>
+                <p>Special Request:  {{ ride.special_request }}</p>
+                <p>Allow Share?  {{ ride.allow_share }}</p>
+        </fieldset>
+        <fieldset>
+            <legend>Sharer Information:</legend>
+            <p>Number of Sharers:  {{sharer_num}}</p>
+        </fieldset>
+        {% if ride.driver %}
+        <fieldset>
+            <legend>Driver Information:</legend>
+            <p>Driver: {{ ride.driver.user }}</p>
+            <p>License: {{ ride.driver.license }}</p>
+            <p>Vehicle Type: {{ ride.driver.vehicle_type }}</p>
+            <p>Max Volume: {{ ride.driver.max_volume }}</p>
+            <p>Special Info: {{ ride.driver.special_info }}</p>
+        </fieldset>
+        {% elif ride.status == 'open' %}
+            </br>
+            <a href="{% url 'ride:owner_edit' ride_id %}">edit</a></br>
+        {% endif %}
+        <a href="{% url 'ride:home' %}">back</a></br>
+</body>
+</html>

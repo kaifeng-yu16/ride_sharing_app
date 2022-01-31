@@ -7,9 +7,15 @@
   <h1>Driver info</h1>
     <form action={% url 'user:add_driver' %} method="post">
     {% csrf_token %}
-        Lisence plate number: <input type="text" name="Lisence" required><br/>
-        Vehicle type: <input type="text" name="Type" required><br/>
-        Maximum number of passengers: <input type="number"  name="Volume" min="0" required><br/>
+        License plate number: <input type="text" name="License" required><br/>
+        Vehicle type:
+        <select name="Type">
+            <option value="Comfort">Comfort</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Sports">Sports</option>
+            <option value="SUV">SUV</option>
+        </select><br>
+        Maximum number of passengers: <input type="number"  name="Volume" min="1" required><br/>
         Special vehical info: <input type="text" name="Info"><br/>
         <input type="submit" value="Submit">
     </form>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Ride As A Driver</title>
+</head>
+<body>
+    <h3>Search Ride As A Driver</h3>
+    <form action={% url 'ride:search_as_driver' %} method="post">
+        {% csrf_token %}
+        <input type="submit" value="Search Ride">
+    </form><br>
+
+    {% if has_result %}
+    <h3>Search Results - Open Rides</h3>
+    <table border="1">
+        <tr>
+            <th>Owner</th>
+            <th>Number of Passengers</th>
+            <th>Destination</th>
+            <th>Arrival Time</th>
+            <th>Special Request</th>
+            <th>Operations</th>
+        </tr>
+        {% for ride in search_results %}
+            <tr>
+                <td>{{ ride.owner }}</td>
+                <td>{{ ride.num_passengers }}</td>
+                <td>{{ ride.destination }}</td>
+                <td>{{ ride.arrival_time }}</td>
+                <td>{{ ride.special_request }}</td>
+                <td>
+                    <form action={% url 'ride:driver_join' ride.id %} method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="join">
+                    </form><br>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <a href="{% url 'ride:home' %}">back</a>
+
+</body>
+</html>

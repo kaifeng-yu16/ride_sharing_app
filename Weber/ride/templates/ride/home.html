@@ -3,6 +3,16 @@
   <head>
     <title>HOME</title>
   </head>
+  <style type="text/css">
+    table {
+        border:solid 1px;
+        border-collapse:collapse;
+    }
+    tr,th {
+        border:solid 1px;
+        padding:8px;
+    }
+  </style>
   <body>
   <h1>Home Page</h1>
     <h3>Messages</h3>
@@ -12,7 +22,78 @@
         {% endfor %}
       {% endif %}
     <h3>Current Rides</h3>
+      <fieldset>
+        <legend>Owner Ride:</legend>
+      <table border=solid cellspacing=10>
+      <tr>
+        <th>Destination</th>
+        <th>Arrival Time</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Operation</th>
+      </tr>
+      {% for o in owner %}
+        <tr>
+          <th>{{o.destination}}</th>
+          <th>{{o.arrival_time}}</th>
+          <th>OWNER</th>
+          <th>{{o.status}}</th>
+          <th><a href="{% url 'ride:owner_view' o.id %}">view detail</a></th>
+        </tr>
+      {% endfor %}
+      </table>
+      </fieldset>
+      <fieldset>
+        <legend>Sharer Ride:</legend>
+      <table border=solid cellspacing=10>
+      <tr>
+        <th>Destination</th>
+        <th>Arrival Time</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Operation</th>
+      </tr>
+      {% for s in sharer %}
+        <tr>
+          <th>{{s.destination}}</th>
+          <th>{{s.arrival_time}}</th>
+          <th>SHARER</th>
+          <th>{{s.status}}</th>
+          <th><a href="{% url 'ride:sharer_view' s.id %}">view detail</a></th>
+        </tr>
+      {% endfor %}
+      </table>
+      </fieldset>
+      <fieldset>
+        <legend>Driver Ride:</legend>
+      <table border=solid cellspacing=10>
+      <tr>
+        <th>Destination</th>
+        <th>Arrival Time</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Operation</th>
+      </tr>
+      {% for d in driver %}
+        <tr>
+          <th>{{d.destination}}</th>
+          <th>{{d.arrival_time}}</th>
+          <th>DRIVER</th>
+          <th>{{d.status}}</th>
+          <th><a href="{% url 'ride:driver_view' d.id %}">view detail</a></th>
+        </tr>
+      {% endfor %}
+      </table>
+      </fieldset>
     <h3>New Rides</h3>
+      <a href="{% url 'ride:create_ride' %}">
+      <input type=button value='Proceed as Ride Owner'></a></br>
+      <a href="{% url 'ride:search_as_sharer' %}">
+      <input type=button value='Proceed as Ride Sharer'></a></br>
+      {% if user.driver %}
+        <a href="{% url 'ride:search_as_driver' %}">
+        <input type=button value='Proceed as Ride Driver'></a></br>
+      {% endif %}
     <h3>Options</h3>
       <a href="{% url 'user:logout'%}"> log out </a></br>
       <a href="{% url 'user:show_info'%}"> View your info </a></br>

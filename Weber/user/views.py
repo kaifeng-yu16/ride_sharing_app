@@ -35,11 +35,11 @@ def add_driver(request):
     if request.method == "GET":
         return render(request, 'user/add_driver.html')
     else:
-        lisence = request.POST['Lisence']
+        license = request.POST['License']
         vehicle_type = request.POST['Type']
         volume = request.POST['Volume']
         info = request.POST['Info']
-        d = Driver(user=request.user, vehicle_type=vehicle_type, lisence=lisence, max_volume=volume, special_info=info)
+        d = Driver(user=request.user, vehicle_type=vehicle_type, license=license, max_volume=volume, special_info=info)
         d.save()
         messages.add_message(request, messages.INFO, 'Create Driver Profile Successfully!')
         return HttpResponseRedirect(reverse('ride:home'))
@@ -66,11 +66,13 @@ def change_info(request):
             user_form.save()
             if hasattr(request.user, 'driver'):
                 driver_form.save()
+                request.user.driver.max_volume = request.POST['Volume']
+                request.user.driver.save()
             messages.add_message(request, messages.INFO, 'Edit User Profile Successfully!')
             return HttpResponseRedirect(reverse('ride:home'))
         else:
             messages.add_message(request, messages.INFO, 'Something went wrong when editing user profile. Please try again!')
-            return render(request, 'user/change_info.html', {'user_form': user_form, 'driver_form': driver_form})
+            return HttpResponseRedirect(reverse('ride:home'))
 
 
 @login_required

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Ride As A Sharer</title>
+</head>
+<body>
+    <h3>Search Ride As A Sharer</h3>
+    <form action={% url 'ride:search_as_sharer' %} method="post">
+        {% csrf_token %}
+        Destination: <input type="text" name="destination" required></br>
+        Acceptable Arrival Time: between <input type="datetime-local" name="early_time" value={{ time }} min={{ time }} max=9999-12-31T23:59 required> 
+                and <input type="datetime-local" name="late_time" value={{ time }} min={{time}} max=9999-12-31T23:59 required></br>
+        </br><input type="submit" value="Search Ride">
+    </form><br>
+
+    {% if has_result %}
+    <h3>Search Results</h3>
+    <table border="1">
+        <tr>
+            <th>Owner</th>
+            <th>Number of Owners</th>
+            <th>Destination</th>
+            <th>Arrival Time</th>
+            <th>Vehicle Type</th>
+            <th>Operations</th>
+        </tr>
+        {% for ride in search_results %}
+            <tr>
+                <td>{{ ride.owner }}</td>
+                <td>{{ ride.num_owners }}</td>
+                <td>{{ ride.destination }}</td>
+                <td>{{ ride.arrival_time }}</td>
+                <td>{{ ride.vehicle_type }}</td>
+                <td>
+                    <a href={% url 'ride:sharer_join' ride.id %}>select</a></br>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <a href="{% url 'ride:home' %}">back</a>
+
+</body>
+</html>
