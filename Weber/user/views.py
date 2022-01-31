@@ -35,6 +35,8 @@ def add_driver(request):
     if request.method == "GET":
         return render(request, 'user/add_driver.html')
     else:
+        if hasattr(request.user, "driver"):
+            return HttpResponse('You are already a driver!')
         first_name = request.POST['first']
         last_name = request.POST['last']
         license = request.POST['License']

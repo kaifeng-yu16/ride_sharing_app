@@ -249,6 +249,7 @@ def create_ride(request):
 
 @login_required
 def search_as_sharer(request):
+    cur_time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
     if request.method == "POST":
         destination = request.POST['destination']
         early_time = request.POST['early_time']
@@ -256,9 +257,8 @@ def search_as_sharer(request):
         search_results = Ride.objects.filter(destination=destination, status='open',
                                              arrival_time__range=(early_time, late_time),
                                              allow_share=True).exclude(owner=request.user).order_by('arrival_time')
-        return render(request, 'ride/search_as_sharer.html', {'has_result': True, 'search_results': search_results})
+        return render(request, 'ride/search_as_sharer.html', {'time': cur_time, 'has_result': True, 'search_results': search_results})
     else:
-        cur_time = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
         return render(request, 'ride/search_as_sharer.html', {'time': cur_time})
 
 @login_required

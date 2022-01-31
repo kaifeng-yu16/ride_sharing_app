@@ -11,6 +11,8 @@
         <fieldset>
             <legend>Ride Information:</legend>
                 <p>Number of Passengers:  {{ ride.num_passengers }}</p>
+                <p>Number of People in Owner's Party:  {{ ride.num_owners }}</p>
+                <p>Owner Username: {{ ride.owner.username }}</p>
                 <p>Destination:  {{ ride.destination }}</p>
                 <p>Arrival Time:  {{ ride.arrival_time }}</p>
                 <p>Requested Vehicle Type:  {{ ride.vehicle_type }}</p>
@@ -20,11 +22,19 @@
         <fieldset>
             <legend>Sharer Information:</legend>
             <p>Number of Sharers:  {{sharer_num}}</p>
+            {% for s in sharers %}
+                <fieldset>
+                <legend>Sharer{{ forloop.counter }}: </legend>
+                <p>Sharer Username:  {{s.sharer.username}}</br>
+                Number of People in this party:  {{ s.num_of_sharers }}</p>
+                </fieldset>
+            {% endfor %}
         </fieldset>
         {% if ride.driver %}
         <fieldset>
             <legend>Driver Information:</legend>
-            <p>Driver: {{ ride.driver.user }}</p>
+            <p>Driver Username: {{ ride.driver.user }}</p>
+            <p>Driver Name: {{ ride.driver.first_name }} {{ride.driver.last_name}}</p>
             <p>License: {{ ride.driver.license }}</p>
             <p>Vehicle Type: {{ ride.driver.vehicle_type }}</p>
             <p>Max Volume: {{ ride.driver.max_volume }}</p>
