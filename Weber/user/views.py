@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm, DriverProfileForm
 
@@ -58,6 +58,8 @@ def change_info(request):
         if hasattr(request.user, 'driver'):
             driver_form = DriverProfileForm(request.POST, instance=request.user.driver)
         if 'driver_del' in request.POST:
+            if ('confirm', ) in request.user.driver.ride_set.all().values_list('status'):
+                return HttpResponse('Please complete all of your rides as a driver before deleting your driver identity!')
             request.user.driver.delete()
             messages.add_message(request, messages.INFO, 'Not a driver anymore!')
             return HttpResponseRedirect(reverse('ride:home'))
