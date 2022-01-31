@@ -156,7 +156,8 @@ def sharer_join(request, ride_id):
         return HttpResponse('This ride was canceled by owner!')
     elif ride.status == 'open':
         if request.method == "POST":
-            if not ride.allow_share or ride.status != 'open' or (request.user.id, ) in ride.sharer_set.all().values_list('sharer'):
+            if not ride.allow_share or ride.status != 'open' or (request.user.id, ) in ride.sharer_set.all().values_list('sharer') \
+                    or request.user == ride.owner:
                 return HttpResponse('Invalid Access!')
             num_of_sharers = request.POST['num_of_sharers']
             sharer = Sharer.objects.create(ride=ride, sharer=request.user, num_of_sharers=num_of_sharers)
